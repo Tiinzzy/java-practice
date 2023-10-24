@@ -2,6 +2,7 @@ package org.netflix;
 
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
+import org.netflix.model.movies.MovieDao;
 
 import java.util.List;
 
@@ -26,6 +27,16 @@ public class Main {
         System.out.printf("\n\nOid: %d, Name: %s, PhoneNo: %s, Email: %s%n", cs.getOid(), cs.getName(), cs.getPhoneNo(), cs.getEmail());
     }
 
+    private void testMovie() {
+        List<MovieDao> movies = MovieDao.loadAll();
+        for (MovieDao md : movies) {
+            System.out.printf("Oid: %d, Title: %s, Release Date: %s, Rating: %s%n", md.getOid(), md.getMovieTitle(), md.getReleaseDate(), md.getRating());
+        }
+
+        MovieDao md = new MovieDao(5);
+        System.out.printf("Oid: %d, Title: %s, Release Date: %s, Rating: %s%n", md.getOid(), md.getMovieTitle(), md.getReleaseDate(), md.getRating());
+    }
+
     public static void main(String[] args) {
         Main m = new Main();
         m.testGenre();
@@ -33,5 +44,9 @@ public class Main {
         System.out.println();
 
         m.testCustomer();
-    }
+
+        System.out.println();
+
+        m.testMovie();
+   }
 }
