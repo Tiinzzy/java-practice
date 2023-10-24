@@ -3,6 +3,8 @@ package org.netflix;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
+import org.netflix.model.subscription.EPrice;
+import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
 
 import java.util.List;
@@ -39,6 +41,13 @@ public class Main {
     }
 
     private void testSubscription() {
+//        SubscriptionDao sdo = new SubscriptionDao(ESubscriptionType.MONTHLY,
+//                EPrice.MULTI_4K,
+//                "2023-01-01",
+//                "2024-01-01"
+//        );
+//        sdo.saveToTable();
+
         List<SubscriptionDao> subscriptions = SubscriptionDao.loadAll();
         for (SubscriptionDao sd : subscriptions) {
             System.out.printf("Oid: %d, Type: %s, Price: %s, Start Date: %s, End Date: %s%n", sd.getOid(), sd.getSubscriptionType(), sd.getPrice(), sd.getSubscriptionDate(), sd.getExpiryDate());
@@ -50,16 +59,16 @@ public class Main {
 
     public static void main(String[] args) {
         Main m = new Main();
-        m.testGenre();
 
-        System.out.println();
-
-        m.testCustomer();
-
-        System.out.println();
-
-        m.testMovie();
+//        m.testGenre();
+//        System.out.println();
+//        m.testCustomer();
+//        System.out.println();
+//        m.testMovie();
 
         m.testSubscription();
-   }
+
+        System.out.println(SubscriptionDao.getPrices());
+        System.out.println(SubscriptionDao.getPrices(EPrice.MULTI_4K));
+    }
 }

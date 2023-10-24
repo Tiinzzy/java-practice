@@ -6,22 +6,37 @@ import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class SubscriptionDao {
     private static final String SUBSCRIPTION_COLLECTION = "subscription";
     private long oid = -1;
-    private String subscriptionType = null;
-    private String price = null;
+    private ESubscriptionType subscriptionType = ESubscriptionType.NOT_DEFINED;
+    private EPrice price = EPrice.NOT_DEFINED;
     private String expiryDate = null;
     private String subscriptionDate = null;
+
+    public static Map<EPrice, Double> getPrices() {
+        Map<EPrice, Double> enumToPrice = new HashMap<>();
+        enumToPrice.put(EPrice.SINGLE_USER, 10.990);
+        enumToPrice.put(EPrice.MULTI_USER, 12.99);
+        enumToPrice.put(EPrice.MULTI_4K, 16.99);
+        return enumToPrice;
+    }
+
+    public static Double getPrices(EPrice ep) {
+        Map<EPrice, Double> enumToPrice = getPrices();
+        return enumToPrice.get(ep);
+    }
 
     public SubscriptionDao() {
     }
 
-    public SubscriptionDao(String subscriptionType, String price, String expiryDate, String subscriptionDate) {
+    public SubscriptionDao(ESubscriptionType subscriptionType, EPrice price, String subscriptionDate, String expiryDate) {
         this.oid = OidGenerator.getNew();
         this.subscriptionType = subscriptionType;
         this.price = price;
@@ -30,37 +45,37 @@ public class SubscriptionDao {
     }
 
     public SubscriptionDao(long oid) {
-        this.oid = oid;
         var db = Database.INSTANCE.getNetflixDatabase();
         Document doc = db.getCollection(SUBSCRIPTION_COLLECTION).find(eq("oid", oid)).first();
         if (doc != null) {
-            this.subscriptionType = doc.getString("subscriptionType");
-            this.price = doc.getString("price");
+            this.oid = oid;
+            this.subscriptionType = ESubscriptionType.valueOf(doc.getString("subscriptionType"));
+            this.price = EPrice.valueOf(doc.getString("price"));
             this.expiryDate = doc.getString("expiryDate");
             this.subscriptionDate = doc.getString("subscriptionDate");
         }
     }
 
-    public void saveToTable(){
+    public void saveToTable() {
         var db = Database.INSTANCE.getNetflixDatabase();
         Document document = new Document();
         document.append("oid", this.oid);
-        document.append("subscriptionType", this.subscriptionType);
-        document.append("price", this.price);
+        document.append("subscriptionType", this.subscriptionType.toString());
+        document.append("price", this.price.toString());
         document.append("expiryDate", this.expiryDate);
         document.append("subscriptionDate", this.subscriptionDate);
         db.getCollection(SUBSCRIPTION_COLLECTION).insertOne(document);
     }
 
-    public static List<SubscriptionDao> loadAll(){
+    public static List<SubscriptionDao> loadAll() {
         var db = Database.INSTANCE.getNetflixDatabase();
         var docs = db.getCollection(SUBSCRIPTION_COLLECTION).find();
         List<SubscriptionDao> allSubscriptionDao = new ArrayList<>();
         for (var doc : docs) {
             SubscriptionDao sd = new SubscriptionDao();
             sd.oid = doc.getLong("oid");
-            sd.subscriptionType = doc.getString("subscriptionType");
-            sd.price = doc.getString("price");
+            sd.subscriptionType = ESubscriptionType.valueOf(doc.getString("subscriptionType"));
+            sd.price = EPrice.valueOf(doc.getString("price"));
             sd.expiryDate = doc.getString("expiryDate");
             sd.subscriptionDate = doc.getString("subscriptionDate");
             allSubscriptionDao.add(sd);
@@ -69,22 +84,22 @@ public class SubscriptionDao {
     }
 
     public long getOid() {
-        return oid;
+        return this.oid;
     }
 
-    public String getSubscriptionType() {
-        return subscriptionType;
+    public ESubscriptionType getSubscriptionType() {
+        return this.subscriptionType;
     }
 
-    public String getPrice() {
-        return price;
+    public EPrice getPrice() {
+        return this.price;
     }
 
     public String getExpiryDate() {
-        return expiryDate;
+        return this.expiryDate;
     }
 
     public String getSubscriptionDate() {
-        return subscriptionDate;
+        return this.subscriptionDate;
     }
 }
