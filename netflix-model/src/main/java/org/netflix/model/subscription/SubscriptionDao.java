@@ -33,7 +33,7 @@ public class SubscriptionDao {
         return enumToPrice.get(ep);
     }
 
-    public SubscriptionDao() {
+    private SubscriptionDao() {
     }
 
     public SubscriptionDao(ESubscriptionType subscriptionType, EPrice price, String subscriptionDate, String expiryDate) {
