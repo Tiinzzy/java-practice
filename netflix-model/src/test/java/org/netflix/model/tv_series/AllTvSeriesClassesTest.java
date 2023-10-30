@@ -2,6 +2,8 @@ package org.netflix.model.tv_series;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +28,6 @@ public class AllTvSeriesClassesTest {
 
         List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(10666);
         assertFalse(allEpisodes.isEmpty());
-
     }
 
     @Test
@@ -50,6 +51,56 @@ public class AllTvSeriesClassesTest {
 
         List<SeasonDao> allSeasons = SeasonDao.loadAll(2089);
         assertFalse(allSeasons.isEmpty());
+    }
 
+    @Test
+    void testTvSeriesDao() {
+        TvSeriesDao tvSeriesDao = new TvSeriesDao(-1);
+        assertEquals(tvSeriesDao.getOid(), -1);
+
+        tvSeriesDao = new TvSeriesDao("Stranger Things", "Just another children like series", "2020-01-01", "2022-01-01");
+        assertTrue(tvSeriesDao.getOid() > -1);
+        assertEquals(tvSeriesDao.getStartDate(), "2020-01-01");
+
+        tvSeriesDao.saveToTable();
+
+        TvSeriesDao readFromDb = new TvSeriesDao(tvSeriesDao.getOid());
+        assertEquals(readFromDb.getOid(), tvSeriesDao.getOid());
+        assertEquals(readFromDb.getTitle(), tvSeriesDao.getTitle());
+
+        tvSeriesDao.addSeason(1, "2020-10-10", "2020-11-10");
+        tvSeriesDao.addSeason(2, "2020-10-10", "2020-11-10");
+
+        var seasonDaoList = tvSeriesDao.loadSeasons();
+        assertNotEquals(seasonDaoList.size(), 0);
+
+        tvSeriesDao.addEpisode(1, "From Pole to Pole", 49, "2006-03-05");
+        var episodesOfSeasonOne = tvSeriesDao.getSeason(1).loadEpisodes();
+        assertNotEquals(episodesOfSeasonOne.size(), 0);
+
+        var wildCardSearchTest = TvSeriesDao.loadAll("stra", 5);
+        assertFalse(wildCardSearchTest.isEmpty());
+
+        wildCardSearchTest = TvSeriesDao.loadAll("how-do-you-spend-your-time-during-the-weekends", 10);
+        assertTrue(wildCardSearchTest.isEmpty());
+
+        wildCardSearchTest = TvSeriesDao.loadAll();
+        assertFalse(wildCardSearchTest.isEmpty());
+    }
+
+    @Test
+    void testTvSeriesDaoEdit() {
+        TvSeriesDao readFromDb = new TvSeriesDao(26);
+        System.out.println(readFromDb.getOid());
+        System.out.println(readFromDb.getTitle());
+
+        var aString = LocalDateTime.now().toString();
+        readFromDb.setTitle(aString);
+        readFromDb.setSummary(aString);
+        readFromDb.saveToTable();
+
+        readFromDb = new TvSeriesDao(26);
+        assertEquals(readFromDb.getTitle(), aString);
+        assertEquals(readFromDb.getSummary(), aString);
     }
 }

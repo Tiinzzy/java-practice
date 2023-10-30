@@ -57,7 +57,7 @@ public class EpisodeDao {
 
     public static List<EpisodeDao> loadAll(long seasonOid) {
         var db = Database.INSTANCE.getNetflixDatabase();
-        var docs = db.getCollection(EPISODE_COLLECTION).find();
+        var docs = db.getCollection(EPISODE_COLLECTION).find(eq("seasonOid", seasonOid));
         var allEpisodesOfASeasonOid = new ArrayList<EpisodeDao>();
         for (var doc : docs) {
             EpisodeDao e = new EpisodeDao();

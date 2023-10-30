@@ -54,7 +54,7 @@ public class SeasonDao {
 
     public static List<SeasonDao> loadAll(long tvSeriesOid) {
         var db = Database.INSTANCE.getNetflixDatabase();
-        var docs = db.getCollection(SEASON_COLLECTION).find();
+        var docs = db.getCollection(SEASON_COLLECTION).find(eq("tvSeriesOid", tvSeriesOid));
         var allSeasonsOfATvSeriesOid = new ArrayList<SeasonDao>();
         for (var doc : docs) {
             SeasonDao e = new SeasonDao();
@@ -66,6 +66,15 @@ public class SeasonDao {
             allSeasonsOfATvSeriesOid.add(e);
         }
         return allSeasonsOfATvSeriesOid;
+    }
+
+    public List<EpisodeDao> loadEpisodes() {
+        return EpisodeDao.loadAll(this.oid);
+    }
+
+    public void addEpisode(String title, int runTime, String airDate) {
+        EpisodeDao episodeDao = new EpisodeDao(title, runTime, airDate, this.oid);
+        episodeDao.saveToTable();
     }
 
     public long getOid() {
