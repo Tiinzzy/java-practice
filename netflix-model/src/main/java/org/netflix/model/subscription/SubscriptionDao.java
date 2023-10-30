@@ -1,6 +1,7 @@
 package org.netflix.model.subscription;
 
 import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 import org.netflix.model.movies.MovieDao;
 import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
