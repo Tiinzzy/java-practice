@@ -26,7 +26,6 @@ public class AllTvSeriesClassesTest {
 
         List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(10666);
         assertFalse(allEpisodes.isEmpty());
-
     }
 
     @Test
@@ -50,6 +49,31 @@ public class AllTvSeriesClassesTest {
 
         List<SeasonDao> allSeasons = SeasonDao.loadAll(2089);
         assertFalse(allSeasons.isEmpty());
+    }
 
+    @Test
+    void testTvSeriesDao() {
+        TvSeriesDao tvSeriesDao = new TvSeriesDao(-1);
+        assertEquals(tvSeriesDao.getOid(), -1);
+
+        tvSeriesDao = new TvSeriesDao("Stranger Things", "Just another children like series", "2020-01-01", "2022-01-01");
+        assertTrue(tvSeriesDao.getOid() > -1);
+        assertEquals(tvSeriesDao.getStartDate(), "2020-01-01");
+
+        tvSeriesDao.saveToTable();
+
+        TvSeriesDao readFromDb = new TvSeriesDao(tvSeriesDao.getOid());
+        assertEquals(readFromDb.getOid(), tvSeriesDao.getOid());
+        assertEquals(readFromDb.getTitle(), tvSeriesDao.getTitle());
+
+        tvSeriesDao.addSeason(1, "2020-10-10", "2020-11-10");
+        tvSeriesDao.addSeason(2, "2020-10-10", "2020-11-10");
+
+        var seasonDaoList = tvSeriesDao.loadSeasons();
+        assertNotEquals(seasonDaoList.size(), 0);
+
+        tvSeriesDao.addEpisode(1, "From Pole to Pole", 49, "2006-03-05");
+        var episodesOfSeasonOne =  tvSeriesDao.getSeason(1).loadEpisodes();
+        assertNotEquals(episodesOfSeasonOne.size(), 0);
     }
 }
