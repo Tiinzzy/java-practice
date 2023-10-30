@@ -44,16 +44,34 @@ public class TvSeriesDao {
     public void saveToTable() {
         var db = Database.INSTANCE.getNetflixDatabase();
         Document document = new Document();
-        document.append("oid", this.oid);
         document.append("title", this.title);
         document.append("summary", this.summary);
         document.append("startDate", this.startDate);
         document.append("endDate", this.endDate);
-        db.getCollection(TV_SERIES_COLLECTION).insertOne(document);
+        document.append("oid", this.oid);
+        if (TvSeriesDao.oidExist(this.oid)) {
+            db.getCollection(TV_SERIES_COLLECTION).replaceOne(eq("oid", this.oid), document);
+            // Bson update = combine(set("title", this.title),set("summary", this.summary));
+            // db.getCollection(TV_SERIES_COLLECTION).updateOne(eq("oid", this.oid), update);
+        } else {
+            db.getCollection(TV_SERIES_COLLECTION).insertOne(document);
+        }
     }
 
-    // Todo: Finish this tomorrow. So that loadAll("thing") returns at least "Stranger Things" and "The Thing", ...
-    public List<TvSeriesDao> loadAll(String nameContains, int count) {
+    private static boolean oidExist(long oid) {
+        TvSeriesDao temp = new TvSeriesDao(oid);
+        return temp.getOid() == oid;
+    }
+
+    public static List<TvSeriesDao> loadAll() {
+        return loadAll("", 100);
+    }
+
+    public static List<TvSeriesDao> loadAll(int count) {
+        return loadAll("", count);
+    }
+
+    public static List<TvSeriesDao> loadAll(String nameContains, int count) {
         var db = Database.INSTANCE.getNetflixDatabase();
         var docs = db.getCollection(TV_SERIES_COLLECTION).find(regex("title", nameContains, "i")).limit(count);
         var allTvSeries = new ArrayList<TvSeriesDao>();
@@ -113,5 +131,21 @@ public class TvSeriesDao {
 
     public String getEndDate() {
         return endDate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
