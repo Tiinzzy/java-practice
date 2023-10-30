@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.regex;
 
 public class TvSeriesDao {
     private static final String TV_SERIES_COLLECTION = "tv_series";
@@ -53,7 +54,19 @@ public class TvSeriesDao {
 
     // Todo: Finish this tomorrow. So that loadAll("thing") returns at least "Stranger Things" and "The Thing", ...
     public List<TvSeriesDao> loadAll(String nameContains, int count) {
-        return null;
+        var db = Database.INSTANCE.getNetflixDatabase();
+        var docs = db.getCollection(TV_SERIES_COLLECTION).find(regex("title", nameContains, "i")).limit(count);
+        var allTvSeries = new ArrayList<TvSeriesDao>();
+        for (var doc : docs) {
+            TvSeriesDao tv = new TvSeriesDao();
+            tv.oid = doc.getLong("oid");
+            tv.title = doc.getString("title");
+            tv.summary = doc.getString("summary");
+            tv.startDate = doc.getString("startDate");
+            tv.endDate = doc.getString("endDate");
+            allTvSeries.add(tv);
+        }
+        return allTvSeries;
     }
 
     public List<SeasonDao> loadSeasons() {
