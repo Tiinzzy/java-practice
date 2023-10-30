@@ -2,6 +2,8 @@ package org.netflix.model.tv_series;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,7 +75,32 @@ public class AllTvSeriesClassesTest {
         assertNotEquals(seasonDaoList.size(), 0);
 
         tvSeriesDao.addEpisode(1, "From Pole to Pole", 49, "2006-03-05");
-        var episodesOfSeasonOne =  tvSeriesDao.getSeason(1).loadEpisodes();
+        var episodesOfSeasonOne = tvSeriesDao.getSeason(1).loadEpisodes();
         assertNotEquals(episodesOfSeasonOne.size(), 0);
+
+        var wildCardSearchTest = TvSeriesDao.loadAll("stra", 5);
+        assertFalse(wildCardSearchTest.isEmpty());
+
+        wildCardSearchTest = TvSeriesDao.loadAll("how-do-you-spend-your-time-during-the-weekends", 10);
+        assertTrue(wildCardSearchTest.isEmpty());
+
+        wildCardSearchTest = TvSeriesDao.loadAll();
+        assertFalse(wildCardSearchTest.isEmpty());
+    }
+
+    @Test
+    void testTvSeriesDaoEdit() {
+        TvSeriesDao readFromDb = new TvSeriesDao(26);
+        System.out.println(readFromDb.getOid());
+        System.out.println(readFromDb.getTitle());
+
+        var aString = LocalDateTime.now().toString();
+        readFromDb.setTitle(aString);
+        readFromDb.setSummary(aString);
+        readFromDb.saveToTable();
+
+        readFromDb = new TvSeriesDao(26);
+        assertEquals(readFromDb.getTitle(), aString);
+        assertEquals(readFromDb.getSummary(), aString);
     }
 }
