@@ -97,10 +97,26 @@ public class AllTvSeriesClassesTest {
         var aString = LocalDateTime.now().toString();
         readFromDb.setTitle(aString);
         readFromDb.setSummary(aString);
+        readFromDb.setStartDate(aString);
+        readFromDb.setEndDate(aString);
         readFromDb.saveToTable();
 
         readFromDb = new TvSeriesDao(26);
         assertEquals(readFromDb.getTitle(), aString);
         assertEquals(readFromDb.getSummary(), aString);
+    }
+
+    @Test
+    void testTvSeriesDaoDelete() {
+        TvSeriesDao newAddMovie = new TvSeriesDao("Tina's Very Own Movie", "Memoir of my life!", "2020-01-01", "2022-01-01");
+        newAddMovie.saveToTable();
+
+        assertEquals(newAddMovie.getTitle(), "Tina's Very Own Movie");
+        assertEquals(newAddMovie.getSummary(), "Memoir of my life!");
+        assertEquals(newAddMovie.getStartDate(), "2020-01-01");
+        assertEquals(newAddMovie.getEndDate(), "2022-01-01");
+
+        long addedMovieId = newAddMovie.getOid();
+
     }
 }
