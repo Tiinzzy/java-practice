@@ -1,7 +1,6 @@
 package org.netflix.model.movies;
 
 import org.bson.Document;
-import org.netflix.model.customer.CustomerDao;
 import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
 
@@ -9,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 
 public class MovieDao {
     private static final String MOVIE_COLLECTION = "movie";
@@ -28,10 +30,10 @@ public class MovieDao {
     }
 
     public MovieDao(long oid) {
-        this.oid = oid;
         var db = Database.INSTANCE.getNetflixDatabase();
         Document doc = db.getCollection(MOVIE_COLLECTION).find(eq("oid", oid)).first();
         if (doc != null) {
+            this.oid = oid;
             this.movieTitle = doc.getString("movieTitle");
             this.releaseDate = doc.getString("releaseDate");
             this.rating = doc.getString("rating");
@@ -45,7 +47,11 @@ public class MovieDao {
         document.append("movieTitle", this.movieTitle);
         document.append("releaseDate", this.releaseDate);
         document.append("rating", this.rating);
-        db.getCollection(MOVIE_COLLECTION).insertOne(document);
+        if(MovieDao.oidExist(this.oid)){
+            db.getCollection(MOVIE_COLLECTION).replaceOne(eq("oid", this.oid), document);
+        }else{
+            db.getCollection(MOVIE_COLLECTION).insertOne(document);
+        }
     }
 
     public static List<MovieDao> loadAll(){
@@ -63,6 +69,23 @@ public class MovieDao {
         return allMovieDao;
     }
 
+    public void deleteMovie(long oid){
+        var db = Database.INSTANCE.getNetflixDatabase();
+        MongoCollection<Document> collection = db.getCollection(MOVIE_COLLECTION);
+        try {
+            DeleteResult result = collection.deleteOne(eq("oid", oid));
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
+
+    }
+
+    private static boolean oidExist(long oid) {
+        MovieDao temp = new MovieDao(oid);
+        return temp.getOid() == oid;
+    }
+
     public long getOid() {
         return oid;
     }
@@ -73,6 +96,18 @@ public class MovieDao {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getRating() {
