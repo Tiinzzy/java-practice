@@ -1,5 +1,8 @@
 package org.netflix.model.subscription;
 
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.netflix.model.movies.MovieDao;
@@ -65,7 +68,38 @@ public class SubscriptionDao {
         document.append("price", this.price.toString());
         document.append("expiryDate", this.expiryDate);
         document.append("subscriptionDate", this.subscriptionDate);
-        db.getCollection(SUBSCRIPTION_COLLECTION).insertOne(document);
+        if (SubscriptionDao.oidExist(this.oid)) {
+            db.getCollection(SUBSCRIPTION_COLLECTION).replaceOne(eq("oid", this.oid), document);
+        } else {
+            db.getCollection(SUBSCRIPTION_COLLECTION).insertOne(document);
+        }
+    }
+
+    public void deleteSubscription(long oid){
+        var db = Database.INSTANCE.getNetflixDatabase();
+        MongoCollection<Document> collection = db.getCollection(SUBSCRIPTION_COLLECTION);
+        try {
+            DeleteResult result = collection.deleteOne(eq("oid", oid));
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
+    }
+
+    public void setSubscriptionType(ESubscriptionType subscriptionType) {
+        this.subscriptionType = subscriptionType;
+    }
+
+    public void setPrice(EPrice price) {
+        this.price = price;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public void setSubscriptionDate(String subscriptionDate) {
+        this.subscriptionDate = subscriptionDate;
     }
 
     public static List<SubscriptionDao> loadAll() {
@@ -82,6 +116,11 @@ public class SubscriptionDao {
             allSubscriptionDao.add(sd);
         }
         return allSubscriptionDao;
+    }
+
+    private static boolean oidExist(long oid) {
+        SubscriptionDao temp = new SubscriptionDao(oid);
+        return temp.getOid() == oid;
     }
 
     public long getOid() {
