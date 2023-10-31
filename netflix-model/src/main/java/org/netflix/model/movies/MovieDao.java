@@ -78,7 +78,6 @@ public class MovieDao {
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
         }
-
     }
 
     private static boolean oidExist(long oid) {
