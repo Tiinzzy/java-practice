@@ -49,7 +49,7 @@ public class AllMovieTest {
         assertEquals(newMovie.getReleaseDate(), "06/06/6666");
         assertEquals(newMovie.getRating(), "6");
 
-        newMovie.deleteMovie(newMovie.getOid());
+        newMovie.delete(newMovie.getOid());
         assertEquals(newMovie.getMovieTitle(), "Test1");
         assertEquals(newMovie.getReleaseDate(), "06/06/6666");
         assertEquals(newMovie.getRating(), "6");
