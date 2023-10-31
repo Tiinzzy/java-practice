@@ -2,6 +2,7 @@ package org.netflix.model.movies;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,11 +12,11 @@ public class AllMovieTest {
 
     @Test
     void testMoviesDao() {
-        MovieDao newMovie = new MovieDao("Heart of Stone", "08/11/2023", "8.5");
+        MovieDao newMovie = new MovieDao("Heart of Gold", "08/10/2023", "5");
         newMovie.saveToTable();
-        assertEquals(newMovie.getMovieTitle(), "Heart of Stone");
-        assertEquals(newMovie.getReleaseDate(), "08/11/2023");
-        assertEquals(newMovie.getRating(), "8.5");
+        assertEquals(newMovie.getMovieTitle(), "Heart of Gold");
+        assertEquals(newMovie.getReleaseDate(), "08/10/2023");
+        assertEquals(newMovie.getRating(), "5");
 
 
         MovieDao getInsertedMovie = new MovieDao(newMovie.getOid());
@@ -23,5 +24,34 @@ public class AllMovieTest {
 
         List<MovieDao> loadAllMovies = MovieDao.loadAll();
         assertFalse(loadAllMovies.isEmpty());
+
+        MovieDao checkMovie = new MovieDao(newMovie.getOid());
+        assertEquals(checkMovie.getMovieTitle(), "Heart of Gold");
+        assertEquals(checkMovie.getReleaseDate(), "08/10/2023");
+        assertEquals(checkMovie.getRating(), "5");
+
+        var aString = LocalDateTime.now().toString();
+        newMovie.setMovieTitle(aString);
+        newMovie.setReleaseDate(aString);
+        newMovie.setRating(aString);
+        newMovie.saveToTable();
+
+        assertEquals(newMovie.getMovieTitle(), aString);
+        assertEquals(newMovie.getReleaseDate(), aString);
+        assertEquals(newMovie.getRating(), aString);
+    }
+
+    @Test
+    void testDeleteAMovie(){
+        MovieDao newMovie = new MovieDao("Test1", "06/06/6666", "6");
+        newMovie.saveToTable();
+        assertEquals(newMovie.getMovieTitle(), "Test1");
+        assertEquals(newMovie.getReleaseDate(), "06/06/6666");
+        assertEquals(newMovie.getRating(), "6");
+
+        newMovie.deleteMovie(newMovie.getOid());
+        assertEquals(newMovie.getMovieTitle(), "Test1");
+        assertEquals(newMovie.getReleaseDate(), "06/06/6666");
+        assertEquals(newMovie.getRating(), "6");
     }
 }
