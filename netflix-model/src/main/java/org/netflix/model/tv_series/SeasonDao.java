@@ -1,5 +1,8 @@
 package org.netflix.model.tv_series;
 
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
@@ -75,6 +78,25 @@ public class SeasonDao {
     public void addEpisode(String title, int runTime, String airDate) {
         EpisodeDao episodeDao = new EpisodeDao(title, runTime, airDate, this.oid);
         episodeDao.saveToTable();
+    }
+
+    public boolean delete(long tvSeriesOid) {
+        var db = Database.INSTANCE.getNetflixDatabase();
+        MongoCollection<Document> collection = db.getCollection(SEASON_COLLECTION);
+        List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(this.oid);
+        for (EpisodeDao episode : allEpisodes) {
+            if (episode.getOid() == this.oid) {
+                try {
+                    DeleteResult result = collection.deleteMany(eq("tvSeriesOid", tvSeriesOid));
+                    System.out.println("Deleted document count: " + result.getDeletedCount());
+                    return true;
+                } catch (MongoException me) {
+                    System.err.println("Unable to delete due to an error: " + me);
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public long getOid() {
