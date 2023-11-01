@@ -80,23 +80,27 @@ public class SeasonDao {
         episodeDao.saveToTable();
     }
 
-    public boolean delete(long tvSeriesOid) {
+    // Todo:
+    public boolean deleteEpisode(long episodeOid) {
+        return false;
+    }
+    // Todo:
+    public boolean deleteEpisodes() {
+        return false;
+    }
+
+    public static boolean delete(long seasonOid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(SEASON_COLLECTION);
-        List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(this.oid);
-        for (EpisodeDao episode : allEpisodes) {
-            if (episode.getOid() == this.oid) {
-                try {
-                    DeleteResult result = collection.deleteMany(eq("tvSeriesOid", tvSeriesOid));
-                    System.out.println("Deleted document count: " + result.getDeletedCount());
-                    return true;
-                } catch (MongoException me) {
-                    System.err.println("Unable to delete due to an error: " + me);
-                    return false;
-                }
-            }
+        try {
+            EpisodeDao.deleteSeasonEpisodes(seasonOid);
+            DeleteResult result = collection.deleteOne(eq("oid", seasonOid));
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+            return false;
         }
-        return false;
     }
 
     public long getOid() {

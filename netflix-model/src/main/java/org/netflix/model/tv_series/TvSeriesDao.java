@@ -116,12 +116,26 @@ public class TvSeriesDao {
         return null;
     }
 
+    public boolean deleteSeason(long seasonOid) {
+        return SeasonDao.delete(seasonOid);
+    }
+
+    public boolean deleteSeasons() {
+        List<SeasonDao> seasons = SeasonDao.loadAll(this.getOid());
+        for (var s : seasons) {
+            if (!SeasonDao.delete(s.getOid())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(TV_SERIES_COLLECTION);
         List<TvSeriesDao> allTvSeries = TvSeriesDao.loadAll();
         for (TvSeriesDao tvSeries : allTvSeries) {
-            if(tvSeries.getOid() == oid){
+            if (tvSeries.getOid() == oid) {
                 try {
                     DeleteResult result = collection.deleteOne(eq("oid", oid));
                     System.out.println("Deleted document count: " + result.getDeletedCount());

@@ -28,6 +28,26 @@ public class AllTvSeriesClassesTest {
 
         List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(10666);
         assertFalse(allEpisodes.isEmpty());
+
+        var toBeDeletedEpisode = new EpisodeDao("To be deleted", 1, "6666-66-66", -666);
+        toBeDeletedEpisode.saveToTable();
+        assertEquals(toBeDeletedEpisode.getSeasonOid(), -666);
+
+        EpisodeDao.delete(toBeDeletedEpisode.getOid());
+        var deletedEpisode = new EpisodeDao(toBeDeletedEpisode.getOid());
+        assertEquals(deletedEpisode.getOid(), -1);
+
+        var e1 = new EpisodeDao("To be deleted 1", 1, "6666-66-66", -666);
+        var e2 = new EpisodeDao("To be deleted 2", 1, "6666-66-66", -666);
+        e1.saveToTable();
+        e2.saveToTable();
+
+        var episodes = EpisodeDao.loadAll(-666);
+        assertEquals(episodes.size(), 2);
+
+        EpisodeDao.deleteSeasonEpisodes(-666);
+        episodes = EpisodeDao.loadAll(-666);
+        assertEquals(episodes.size(), 0);
     }
 
     @Test
