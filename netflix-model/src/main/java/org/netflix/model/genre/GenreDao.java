@@ -59,7 +59,7 @@ public class GenreDao {
         return allGenreDao;
     }
 
-    public void deleteGenre(long oid) {
+    public void delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(GENRE_COLLECTION);
         try {
