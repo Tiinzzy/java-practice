@@ -4,9 +4,6 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
-import org.netflix.model.subscription.EPrice;
-import org.netflix.model.subscription.ESubscriptionType;
-import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
 
