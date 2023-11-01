@@ -69,7 +69,7 @@ public class CustomerDao {
         return allCustomerDao;
     }
 
-    public void deleteACustomer(long oid) {
+    public void delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(CUSTOMER_COLLECTION);
         try {

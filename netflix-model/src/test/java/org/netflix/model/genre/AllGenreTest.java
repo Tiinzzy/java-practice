@@ -48,7 +48,7 @@ public class AllGenreTest {
         assertEquals(gn.getDescription(), "Sci-Fi");
         assertEquals(gn.getOid(), newGnId);
 
-        gn.deleteGenre(gn.getOid());
+        gn.delete(gn.getOid());
         assertEquals(gn.getOid(), newGnId);
     }
 

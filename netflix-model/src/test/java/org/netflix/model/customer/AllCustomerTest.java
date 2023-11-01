@@ -52,7 +52,7 @@ public class AllCustomerTest {
         assertEquals(newCustomer.getEmail(), "test1@email.com");
 
         long customerId = newCustomer.getOid();
-        newCustomer.deleteACustomer(customerId);
+        newCustomer.delete(customerId);
         assertEquals(newCustomer.getOid(), customerId);
     }
 
