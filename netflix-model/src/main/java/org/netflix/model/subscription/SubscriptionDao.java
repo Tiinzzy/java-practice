@@ -75,7 +75,7 @@ public class SubscriptionDao {
         }
     }
 
-    public void deleteSubscription(long oid){
+    public void delete(long oid){
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(SUBSCRIPTION_COLLECTION);
         try {

@@ -54,7 +54,7 @@ public class AllSubscriptionTest {
 
         long subscriberId = newSubscriber.getOid();
 
-        newSubscriber.deleteSubscription(subscriberId);
+        newSubscriber.delete(subscriberId);
         assertEquals(newSubscriber.getOid(), subscriberId);
     }
 }

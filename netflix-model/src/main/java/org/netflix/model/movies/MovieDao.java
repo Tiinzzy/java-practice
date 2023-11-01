@@ -1,6 +1,7 @@
 package org.netflix.model.movies;
 
 import org.bson.Document;
+import org.netflix.model.genre.GenreDao;
 import org.netflix.utility.Database;
 import org.netflix.utility.OidGenerator;
 
@@ -19,6 +20,9 @@ public class MovieDao {
     private String movieTitle = null;
     private String releaseDate = null;
     private String rating = null;
+
+    // Todo: to be implemented in foreseeable future
+    // private List<GenreDao> genreDaoList = new ArrayList<>();
 
     public MovieDao() {
     }
