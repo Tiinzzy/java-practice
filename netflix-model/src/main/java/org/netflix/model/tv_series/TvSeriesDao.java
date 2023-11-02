@@ -80,7 +80,6 @@ public class TvSeriesDao {
         var allTvSeries = new ArrayList<TvSeriesDao>();
         for (var doc : docs) {
             TvSeriesDao tv = new TvSeriesDao();
-            tv.oid = doc.getLong("oid");
             tv.title = doc.getString("title");
             tv.summary = doc.getString("summary");
             tv.startDate = doc.getString("startDate");
@@ -120,23 +119,26 @@ public class TvSeriesDao {
         return SeasonDao.delete(seasonOid);
     }
 
-    public boolean deleteSeasons() {
-        List<SeasonDao> seasons = SeasonDao.loadAll(this.getOid());
+    public static boolean deleteSeasons(long tvSeriesOid) {
+        List<SeasonDao> seasons = SeasonDao.loadAll(tvSeriesOid);
         for (var s : seasons) {
-            if (!SeasonDao.delete(s.getOid())) {
-                return false;
+            if (s.getTvSeriesOid() == tvSeriesOid) {
+                if (!SeasonDao.delete(s.getOid())) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    public boolean delete(long oid) {
+    public static boolean delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(TV_SERIES_COLLECTION);
         List<TvSeriesDao> allTvSeries = TvSeriesDao.loadAll();
         for (TvSeriesDao tvSeries : allTvSeries) {
             if (tvSeries.getOid() == oid) {
                 try {
+                    TvSeriesDao.deleteSeasons(oid);
                     DeleteResult result = collection.deleteOne(eq("oid", oid));
                     System.out.println("Deleted document count: " + result.getDeletedCount());
                     return true;
