@@ -71,11 +71,11 @@ public class EpisodeDao {
         return allEpisodesOfASeasonOid;
     }
 
-    public static boolean delete(long seasonOid) {
+    public static boolean delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(EPISODE_COLLECTION);
         try {
-            DeleteResult result = collection.deleteOne(eq("seasonOid", seasonOid));
+            DeleteResult result = collection.deleteOne(eq("oid", oid));
             System.out.println("Deleted document count: " + result.getDeletedCount());
             return true;
         } catch (MongoException me) {
@@ -88,7 +88,7 @@ public class EpisodeDao {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(EPISODE_COLLECTION);
         try {
-            DeleteResult result = collection.deleteOne(eq("seasonOid", seasonOid));
+            DeleteResult result = collection.deleteMany(eq("seasonOid", seasonOid));
             System.out.println("Deleted document count: " + result.getDeletedCount());
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
