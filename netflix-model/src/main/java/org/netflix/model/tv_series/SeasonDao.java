@@ -80,20 +80,16 @@ public class SeasonDao {
         episodeDao.saveToTable();
     }
 
-    // Todo:
-    public void deleteEpisode(long episodeOid) {
-        EpisodeDao.delete(episodeOid);
+    public boolean deleteEpisode(long episodeOid) {
+        return EpisodeDao.delete(episodeOid);
     }
 
     // Todo:
-    public boolean deleteEpisodes() {
-        List<SeasonDao> seasons = SeasonDao.loadAll(this.getOid());
-        for (var s : seasons) {
-            if (!EpisodeDao.deleteSeasonEpisodes(s.getOid())) {
-                return false;
-            }
+    public void deleteEpisodes(long episodeOid) {
+        List<EpisodeDao> episodes = EpisodeDao.loadAll(this.getOid());
+        for (var e : episodes) {
+            EpisodeDao.delete(e.getOid());
         }
-        return true;
     }
 
     public static boolean delete(long seasonOid) {
