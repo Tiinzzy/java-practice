@@ -90,11 +90,10 @@ public class EpisodeDao {
         try {
             DeleteResult result = collection.deleteMany(eq("seasonOid", seasonOid));
             System.out.println("Deleted document count: " + result.getDeletedCount());
-            return true;
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
-            return false;
         }
+        return false;
     }
 
     public long getOid() {

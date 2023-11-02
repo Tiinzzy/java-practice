@@ -28,26 +28,6 @@ public class AllTvSeriesClassesTest {
 
         List<EpisodeDao> allEpisodes = EpisodeDao.loadAll(10666);
         assertFalse(allEpisodes.isEmpty());
-
-        var toBeDeletedEpisode = new EpisodeDao("To be deleted", 1, "6666-66-66", -666);
-        toBeDeletedEpisode.saveToTable();
-        assertEquals(toBeDeletedEpisode.getSeasonOid(), -666);
-
-        EpisodeDao.delete(toBeDeletedEpisode.getOid());
-        var deletedEpisode = new EpisodeDao(toBeDeletedEpisode.getOid());
-        assertEquals(deletedEpisode.getOid(), -1);
-
-        var e1 = new EpisodeDao("To be deleted 1", 1, "6666-66-66", -666);
-        var e2 = new EpisodeDao("To be deleted 2", 1, "6666-66-66", -666);
-        e1.saveToTable();
-        e2.saveToTable();
-
-        var episodes = EpisodeDao.loadAll(-666);
-        assertEquals(episodes.size(), 2);
-
-        EpisodeDao.deleteSeasonEpisodes(-666);
-        episodes = EpisodeDao.loadAll(-666);
-        assertEquals(episodes.size(), 0);
     }
 
     @Test
@@ -138,5 +118,67 @@ public class AllTvSeriesClassesTest {
 
         long addedMovieId = newAddMovie.getOid();
 
+    }
+
+    @Test
+    void testDeleteEpisodes() {
+        var toBeDeletedEpisode = new EpisodeDao("To be deleted", 1, "6666-66-66", -666);
+        toBeDeletedEpisode.saveToTable();
+        assertEquals(toBeDeletedEpisode.getSeasonOid(), -666);
+
+        EpisodeDao.delete(toBeDeletedEpisode.getOid());
+        var deletedEpisode = new EpisodeDao(toBeDeletedEpisode.getOid());
+        assertEquals(deletedEpisode.getOid(), -1);
+
+        var e1 = new EpisodeDao("To be deleted 1", 1, "6666-66-66", -666);
+        var e2 = new EpisodeDao("To be deleted 2", 1, "6666-66-66", -666);
+        e1.saveToTable();
+        e2.saveToTable();
+
+        var episodes = EpisodeDao.loadAll(-666);
+        assertEquals(episodes.size(), 2);
+
+        EpisodeDao.deleteSeasonEpisodes(-666);
+        episodes = EpisodeDao.loadAll(-666);
+        assertEquals(episodes.size(), 0);
+
+        SeasonDao newEpisodesForSeason = new SeasonDao(1, "2222-22-22", "3333-33-33", 232);
+        newEpisodesForSeason.saveToTable();
+        assertEquals(newEpisodesForSeason.getTvSeriesOid(), 232);
+
+        newEpisodesForSeason.addEpisode("Ep1", 1, "2222-22-20");
+        newEpisodesForSeason.addEpisode("Ep2", 1, "2222-22-21");
+        newEpisodesForSeason.addEpisode("Ep3", 1, "2222-22-22");
+
+        var allEpisodes = EpisodeDao.loadAll(newEpisodesForSeason.getOid());
+        assertEquals(allEpisodes.size(), 3);
+        newEpisodesForSeason.deleteEpisodes(newEpisodesForSeason.getOid());
+
+        allEpisodes = EpisodeDao.loadAll(newEpisodesForSeason.getOid());
+        assertEquals(allEpisodes.size(), 0);
+
+        newEpisodesForSeason.addEpisode("Ep4", 1, "2222-22-23");
+        newEpisodesForSeason.addEpisode("Ep5", 1, "2222-22-24");
+        allEpisodes = EpisodeDao.loadAll(newEpisodesForSeason.getOid());
+//        need to get the episode oid but I don't know how to read from the list!
+    }
+
+    @Test
+    void testDeleteSeasons() {
+        TvSeriesDao newTvSeriesToDelete = new TvSeriesDao("To be deleted!", "this is just a test for deletion of season", "6666-66-66", "7777-77-77");
+        newTvSeriesToDelete.saveToTable();
+        assertEquals(newTvSeriesToDelete.getTitle(), "To be deleted!");
+
+        newTvSeriesToDelete.addSeason(1, "1234", "5678");
+        newTvSeriesToDelete.addSeason(2, "1234", "5678");
+        newTvSeriesToDelete.addSeason(3, "1234", "5678");
+        var allNewSeasons = SeasonDao.loadAll(newTvSeriesToDelete.getOid());
+        assertEquals(allNewSeasons.size(), 3);
+
+        newTvSeriesToDelete.deleteSeasons(newTvSeriesToDelete.getOid());
+        allNewSeasons = SeasonDao.loadAll(newTvSeriesToDelete.getOid());
+        assertEquals(allNewSeasons.size(), 0);
+
+        var delete = TvSeriesDao.delete(newTvSeriesToDelete.getOid());
     }
 }
