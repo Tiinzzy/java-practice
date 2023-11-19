@@ -1,6 +1,7 @@
-package org.netflix.model.genre;
+package org.netflix.genre;
 
 import org.junit.jupiter.api.Test;
+import org.netflix.model.genre.GenreDao;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,9 +33,9 @@ public class AllGenreTest {
 
     @Test
     void testGenreUpdate(){
-        GenreDao gn = new GenreDao(101);
+        GenreDao gn = new GenreDao(352);
         assertEquals(gn.getDescription(), "Psyhcological");
-        assertEquals(gn.getOid(), 101);
+        assertEquals(gn.getOid(), 352);
 
         gn.setDescription("Western");
         gn.saveToTable();
@@ -42,7 +43,7 @@ public class AllGenreTest {
     }
 
     @Test
-    void testDleteGenre(){
+    void testDeleteGenre(){
         GenreDao gn = new GenreDao("Sci-Fi");
         long newGnId = gn.getOid();
         assertEquals(gn.getDescription(), "Sci-Fi");
