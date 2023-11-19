@@ -180,5 +180,6 @@ public class AllTvSeriesClassesTest {
         assertEquals(allNewSeasons.size(), 0);
 
         var delete = TvSeriesDao.delete(newTvSeriesToDelete.getOid());
+        assertEquals(delete, true);
     }
 }
