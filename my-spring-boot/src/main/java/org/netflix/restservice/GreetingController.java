@@ -101,4 +101,34 @@ public class GreetingController {
         }
     }
 
+    @PostMapping("/movie/add")
+    public Boolean addMovie(@RequestBody MyMovieData data) {
+        MovieDao newMovie = new MovieDao(data.getMovieTitle(), data.getReleaseDate(), data.getRating());
+        newMovie.saveToTable();
+
+        MovieDao loadNew = new MovieDao(newMovie.getOid());
+        if (loadNew.getOid() == newMovie.getOid()) {
+            return true;
+        }
+        return false;
+    }
+
+    static class MyMovieData {
+        private String movieTitle;
+        private String releaseDate;
+        private String rating;
+
+        public String getMovieTitle() {
+            return movieTitle;
+        }
+
+        public String getReleaseDate() {
+            return releaseDate;
+        }
+
+        public String getRating() {
+            return rating;
+        }
+    }
+
 }
