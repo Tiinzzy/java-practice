@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
+import org.netflix.model.subscription.SubscriptionDao;
+import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +42,16 @@ public class GreetingController {
 	@GetMapping("/movie/all")
 	public List<MovieDao> allMovies() {
 		return MovieDao.loadAll();
+	}
+
+	@GetMapping("/subscription/all")
+	public List<SubscriptionDao> allSubscriptions() {
+		return SubscriptionDao.loadAll();
+	}
+
+	@GetMapping("/tvseries/all")
+	public List<TvSeriesDao> allTvSeries() {
+		return TvSeriesDao.loadAll();
 	}
 	
 }
