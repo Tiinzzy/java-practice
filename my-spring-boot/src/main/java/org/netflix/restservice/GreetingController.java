@@ -8,10 +8,7 @@ import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
 import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.TvSeriesDao;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GreetingController {
@@ -52,6 +49,26 @@ public class GreetingController {
 	@GetMapping("/tvseries/all")
 	public List<TvSeriesDao> allTvSeries() {
 		return TvSeriesDao.loadAll();
+	}
+
+	@PostMapping("/genre/add")
+	public Boolean addGenre(@RequestBody MyGenreData data) {
+		GenreDao newGenre = new GenreDao(data.getDescription());
+		newGenre.saveToTable();
+
+		GenreDao loadNew = new GenreDao(newGenre.getOid());
+		if(loadNew.getOid() == newGenre.getOid()){
+			return true;
+		}
+        return false;
+	}
+
+	static class MyGenreData{
+		private String description;
+
+		public String getDescription() {
+			return description;
+		}
 	}
 	
 }
