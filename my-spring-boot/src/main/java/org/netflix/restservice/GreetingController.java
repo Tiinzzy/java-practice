@@ -1,5 +1,6 @@
 package org.netflix.restservice;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.netflix.model.genre.GenreDao;
@@ -22,6 +23,11 @@ public class GreetingController {
 	@GetMapping("/genre/{id}")
 	public GenreDao genre(@PathVariable(required = true) long id) {
 		return new GenreDao(id);
+	}
+
+	@GetMapping("/genre/all")
+	public List<GenreDao> allGenre() {
+		return GenreDao.loadAll();
 	}
 	
 }
