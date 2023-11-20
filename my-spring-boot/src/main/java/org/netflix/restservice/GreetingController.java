@@ -3,6 +3,7 @@ package org.netflix.restservice;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,11 @@ public class GreetingController {
 	@GetMapping("/genre/all")
 	public List<GenreDao> allGenre() {
 		return GenreDao.loadAll();
+	}
+
+	@GetMapping("/customer/all")
+	public List<CustomerDao> allCustomers() {
+		return CustomerDao.loadAll();
 	}
 	
 }
