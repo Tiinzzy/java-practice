@@ -164,4 +164,12 @@ public class GreetingController {
         return true;
     }
 
+    @PostMapping("/movie/delete")
+    public Boolean deleteMovie(@RequestBody MyMovieData data) {
+        MovieDao removeMovie = new MovieDao(data.getOid());
+        removeMovie.delete(data.getOid());
+
+        return true;
+    }
+
 }
