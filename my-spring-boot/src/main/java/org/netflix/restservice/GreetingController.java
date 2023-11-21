@@ -249,4 +249,15 @@ public class GreetingController {
         reloadMovie.saveToTable();
         return true;
     }
+
+    @PostMapping("/subscription/update")
+    public Boolean updateSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao reloadSub = new SubscriptionDao(data.getOid());
+        reloadSub.setExpiryDate(data.getExpiryDate());
+        reloadSub.setPrice(data.getPrice());
+        reloadSub.setSubscriptionType(data.getSubscriptionType());
+        reloadSub.setSubscriptionDate(data.getSubscriptionDate());
+        reloadSub.saveToTable();
+        return true;
+    }
 }
