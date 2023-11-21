@@ -148,4 +148,12 @@ public class GreetingController {
         }
     }
 
+    @PostMapping("/customer/delete")
+    public Boolean deleteCustomer(@RequestBody MyCustomerData data) {
+        CustomerDao deleteCustomer = new CustomerDao(data.getOid());
+        deleteCustomer.delete(data.getOid());
+        
+        return true;
+    }
+
 }
