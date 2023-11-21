@@ -214,4 +214,12 @@ public class GreetingController {
         }
     }
 
+    @PostMapping("/subscription/delete")
+    public Boolean deleteSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao removeSub = new SubscriptionDao(data.getOid());
+        removeSub.delete(data.getOid());
+
+        return true;
+    }
+
 }
