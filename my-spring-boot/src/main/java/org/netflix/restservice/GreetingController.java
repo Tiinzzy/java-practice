@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
+import org.netflix.model.subscription.EPrice;
+import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +66,13 @@ public class GreetingController {
     }
 
     static class MyGenreData {
+        private long oid;
+
         private String description;
+
+        public long getOid() {
+            return oid;
+        }
 
         public String getDescription() {
             return description;
@@ -84,6 +92,8 @@ public class GreetingController {
     }
 
     static class MyCustomerData {
+
+        private long oid;
         private String name;
         private String phoneNo;
         private String email;
@@ -98,6 +108,10 @@ public class GreetingController {
 
         public String getEmail() {
             return email;
+        }
+
+        public long getOid() {
+            return oid;
         }
     }
 
@@ -114,6 +128,7 @@ public class GreetingController {
     }
 
     static class MyMovieData {
+        private long oid;
         private String movieTitle;
         private String releaseDate;
         private String rating;
@@ -129,6 +144,120 @@ public class GreetingController {
         public String getRating() {
             return rating;
         }
+
+        public long getOid() {
+            return oid;
+        }
     }
 
+    @PostMapping("/customer/delete")
+    public Boolean deleteCustomer(@RequestBody MyCustomerData data) {
+        CustomerDao removeCustomer = new CustomerDao(data.getOid());
+        removeCustomer.delete(data.getOid());
+
+        return true;
+    }
+
+    @PostMapping("/genre/delete")
+    public Boolean deleteGenre(@RequestBody MyGenreData data) {
+        GenreDao removeGenre = new GenreDao(data.getOid());
+        removeGenre.delete(data.getOid());
+
+        return true;
+    }
+
+    @PostMapping("/movie/delete")
+    public Boolean deleteMovie(@RequestBody MyMovieData data) {
+        MovieDao removeMovie = new MovieDao(data.getOid());
+        removeMovie.delete(data.getOid());
+
+        return true;
+    }
+
+    @PostMapping("/subscription/add")
+    public Boolean addSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao newSub = new SubscriptionDao(data.getSubscriptionType(), data.getPrice(), data.getSubscriptionDate(), data.getExpiryDate());
+        newSub.saveToTable();
+
+        SubscriptionDao loadNew = new SubscriptionDao(newSub.getOid());
+        if (loadNew.getOid() == newSub.getOid()) {
+            return true;
+        }
+        return false;
+    }
+
+    static class MySubscriptionData {
+        private long oid;
+        private ESubscriptionType subscriptionType;
+        private EPrice price;
+        private String expiryDate;
+        private String subscriptionDate;
+
+        public long getOid() {
+            return oid;
+        }
+
+        public ESubscriptionType getSubscriptionType() {
+            return subscriptionType;
+        }
+
+        public EPrice getPrice() {
+            return price;
+        }
+
+        public String getExpiryDate() {
+            return expiryDate;
+        }
+
+        public String getSubscriptionDate() {
+            return subscriptionDate;
+        }
+    }
+
+    @PostMapping("/subscription/delete")
+    public Boolean deleteSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao removeSub = new SubscriptionDao(data.getOid());
+        removeSub.delete(data.getOid());
+
+        return true;
+    }
+
+    @PostMapping("/customer/update")
+    public Boolean updateCustomer(@RequestBody MyCustomerData data) {
+        CustomerDao reloadCustomer = new CustomerDao(data.getOid());
+        reloadCustomer.setName(data.getName());
+        reloadCustomer.setEmail(data.getEmail());
+        reloadCustomer.setPhoneNo(data.phoneNo);
+        reloadCustomer.saveToTable();
+        return true;
+    }
+
+    @PostMapping("/genre/update")
+    public Boolean updateGenre(@RequestBody MyGenreData data) {
+        GenreDao reloadGenre = new GenreDao(data.getOid());
+        reloadGenre.setDescription(data.getDescription());
+        reloadGenre.saveToTable();
+        return true;
+    }
+
+    @PostMapping("/movie/update")
+    public Boolean updateMovie(@RequestBody MyMovieData data) {
+        MovieDao reloadMovie = new MovieDao(data.getOid());
+        reloadMovie.setMovieTitle(data.getMovieTitle());
+        reloadMovie.setRating(data.getRating());
+        reloadMovie.setReleaseDate(data.getReleaseDate());
+        reloadMovie.saveToTable();
+        return true;
+    }
+
+    @PostMapping("/subscription/update")
+    public Boolean updateSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao reloadSub = new SubscriptionDao(data.getOid());
+        reloadSub.setExpiryDate(data.getExpiryDate());
+        reloadSub.setPrice(data.getPrice());
+        reloadSub.setSubscriptionType(data.getSubscriptionType());
+        reloadSub.setSubscriptionDate(data.getSubscriptionDate());
+        reloadSub.saveToTable();
+        return true;
+    }
 }
