@@ -222,4 +222,22 @@ public class GreetingController {
         return true;
     }
 
+    @PostMapping("/customer/update")
+    public Boolean updateCustomer(@RequestBody MyCustomerData data) {
+        CustomerDao reloadCustomer = new CustomerDao(data.getOid());
+        reloadCustomer.setName(data.getName());
+        reloadCustomer.setEmail(data.getEmail());
+        reloadCustomer.setPhoneNo(data.phoneNo);
+        reloadCustomer.saveToTable();
+        return true;
+    }
+
+    @PostMapping("/genre/update")
+    public Boolean updateGenre(@RequestBody MyGenreData data) {
+        GenreDao reloadGenre = new GenreDao(data.getOid());
+        reloadGenre.setDescription(data.getDescription());
+        reloadGenre.saveToTable();
+        return true;
+    }
+
 }
