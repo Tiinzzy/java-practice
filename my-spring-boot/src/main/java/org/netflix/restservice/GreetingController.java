@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
+import org.netflix.model.subscription.EPrice;
+import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.web.bind.annotation.*;
@@ -170,6 +172,46 @@ public class GreetingController {
         removeMovie.delete(data.getOid());
 
         return true;
+    }
+
+    @PostMapping("/subscription/add")
+    public Boolean addSubscription(@RequestBody MySubscriptionData data) {
+        SubscriptionDao newSub = new SubscriptionDao(data.getSubscriptionType(), data.getPrice(), data.getSubscriptionDate(), data.getExpiryDate());
+        newSub.saveToTable();
+
+        SubscriptionDao loadNew = new SubscriptionDao(newSub.getOid());
+        if (loadNew.getOid() == newSub.getOid()) {
+            return true;
+        }
+        return false;
+    }
+
+    static class MySubscriptionData {
+        private long oid;
+        private ESubscriptionType subscriptionType;
+        private EPrice price;
+        private String expiryDate;
+        private String subscriptionDate;
+
+        public long getOid() {
+            return oid;
+        }
+
+        public ESubscriptionType getSubscriptionType() {
+            return subscriptionType;
+        }
+
+        public EPrice getPrice() {
+            return price;
+        }
+
+        public String getExpiryDate() {
+            return expiryDate;
+        }
+
+        public String getSubscriptionDate() {
+            return subscriptionDate;
+        }
     }
 
 }
