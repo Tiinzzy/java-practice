@@ -64,7 +64,13 @@ public class GreetingController {
     }
 
     static class MyGenreData {
+        private long oid;
+
         private String description;
+
+        public long getOid() {
+            return oid;
+        }
 
         public String getDescription() {
             return description;
@@ -84,6 +90,8 @@ public class GreetingController {
     }
 
     static class MyCustomerData {
+
+        private long oid;
         private String name;
         private String phoneNo;
         private String email;
@@ -98,6 +106,10 @@ public class GreetingController {
 
         public String getEmail() {
             return email;
+        }
+
+        public long getOid() {
+            return oid;
         }
     }
 
@@ -114,6 +126,7 @@ public class GreetingController {
     }
 
     static class MyMovieData {
+        private long oid;
         private String movieTitle;
         private String releaseDate;
         private String rating;
@@ -128,6 +141,10 @@ public class GreetingController {
 
         public String getRating() {
             return rating;
+        }
+
+        public long getOid() {
+            return oid;
         }
     }
 
