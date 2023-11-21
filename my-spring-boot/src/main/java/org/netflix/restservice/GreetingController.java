@@ -150,9 +150,17 @@ public class GreetingController {
 
     @PostMapping("/customer/delete")
     public Boolean deleteCustomer(@RequestBody MyCustomerData data) {
-        CustomerDao deleteCustomer = new CustomerDao(data.getOid());
-        deleteCustomer.delete(data.getOid());
-        
+        CustomerDao removeCustomer = new CustomerDao(data.getOid());
+        removeCustomer.delete(data.getOid());
+
+        return true;
+    }
+
+    @PostMapping("/genre/delete")
+    public Boolean deleteGenre(@RequestBody MyGenreData data) {
+        GenreDao removeGenre = new GenreDao(data.getOid());
+        removeGenre.delete(data.getOid());
+
         return true;
     }
 
