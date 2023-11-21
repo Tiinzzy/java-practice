@@ -240,4 +240,13 @@ public class GreetingController {
         return true;
     }
 
+    @PostMapping("/movie/update")
+    public Boolean updateMovie(@RequestBody MyMovieData data) {
+        MovieDao reloadMovie = new MovieDao(data.getOid());
+        reloadMovie.setMovieTitle(data.getMovieTitle());
+        reloadMovie.setRating(data.getRating());
+        reloadMovie.setReleaseDate(data.getReleaseDate());
+        reloadMovie.saveToTable();
+        return true;
+    }
 }
