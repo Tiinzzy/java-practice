@@ -59,13 +59,10 @@ public class GreetingController {
         newGenre.saveToTable();
 
         GenreDao loadNew = new GenreDao(newGenre.getOid());
-        if (loadNew.getOid() == newGenre.getOid()) {
-            return true;
-        }
-        return false;
+        return (loadNew.getOid() == newGenre.getOid());
     }
 
-    static class MyGenreData {
+    public static class MyGenreData {
         private long oid;
 
         private String description;
@@ -85,13 +82,10 @@ public class GreetingController {
         newCustomer.saveToTable();
 
         CustomerDao loadNew = new CustomerDao(newCustomer.getOid());
-        if (loadNew.getOid() == newCustomer.getOid()) {
-            return true;
-        }
-        return false;
+        return loadNew.getOid() == newCustomer.getOid();
     }
 
-    static class MyCustomerData {
+    public static class MyCustomerData {
 
         private long oid;
         private String name;
@@ -121,13 +115,10 @@ public class GreetingController {
         newMovie.saveToTable();
 
         MovieDao loadNew = new MovieDao(newMovie.getOid());
-        if (loadNew.getOid() == newMovie.getOid()) {
-            return true;
-        }
-        return false;
+        return (loadNew.getOid() == newMovie.getOid());
     }
 
-    static class MyMovieData {
+    public static class MyMovieData {
         private long oid;
         private String movieTitle;
         private String releaseDate;
@@ -186,7 +177,7 @@ public class GreetingController {
         return false;
     }
 
-    static class MySubscriptionData {
+    public static class MySubscriptionData {
         private long oid;
         private ESubscriptionType subscriptionType;
         private EPrice price;

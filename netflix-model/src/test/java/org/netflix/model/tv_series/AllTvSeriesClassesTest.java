@@ -182,4 +182,12 @@ public class AllTvSeriesClassesTest {
         var delete = TvSeriesDao.delete(newTvSeriesToDelete.getOid());
         assertEquals(delete, true);
     }
+
+    @Test
+    void testAddingTv(){
+        TvSeriesDao tvSeriesDao = new TvSeriesDao("test 1", "Just another test to see oid", "2020-01-01", "2022-01-01");
+        assertEquals(tvSeriesDao.getStartDate(), "2020-01-01");
+
+        tvSeriesDao.saveToTable();
+    }
 }

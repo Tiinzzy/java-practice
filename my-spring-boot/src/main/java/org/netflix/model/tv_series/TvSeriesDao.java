@@ -80,6 +80,7 @@ public class TvSeriesDao {
         var allTvSeries = new ArrayList<TvSeriesDao>();
         for (var doc : docs) {
             TvSeriesDao tv = new TvSeriesDao();
+            tv.oid = doc.getLong("oid");
             tv.title = doc.getString("title");
             tv.summary = doc.getString("summary");
             tv.startDate = doc.getString("startDate");
