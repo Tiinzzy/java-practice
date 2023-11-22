@@ -9,6 +9,7 @@ import org.netflix.model.movies.MovieDao;
 import org.netflix.model.subscription.EPrice;
 import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
+import org.netflix.model.tv_series.SeasonDao;
 import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.web.bind.annotation.*;
 
@@ -257,7 +258,15 @@ public class GreetingController {
         TvSeriesDao newTvSeries = new TvSeriesDao(data.getTitle(), data.getSummary(), data.getStartDate(), data.getEndDate());
         newTvSeries.saveToTable();
 
+        SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), newTvSeries.getOid());
+        newSeason.saveToTable();
+        SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
+
         TvSeriesDao loadNew = new TvSeriesDao(newTvSeries.getOid());
+
+        if(data.getSeasonNumber()>0){
+            return loadNew.getOid() == newTvSeries.getOid() & loadNewSeason.getOid() == newSeason.getOid();
+        }
         return loadNew.getOid() == newTvSeries.getOid();
     }
 
@@ -267,6 +276,22 @@ public class GreetingController {
         private String summary;
         private String startDate;
         private String endDate ;
+        private int seasonNumber;
+
+        private String seasonStartDate;
+        private String seasonEndDate;
+
+        public int getSeasonNumber() {
+            return seasonNumber;
+        }
+
+        public String getSeasonStartDate() {
+            return seasonStartDate;
+        }
+
+        public String getSeasonEndDate() {
+            return seasonEndDate;
+        }
 
         public long getOid() {
             return oid;
