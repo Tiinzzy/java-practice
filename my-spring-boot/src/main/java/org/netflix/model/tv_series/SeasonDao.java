@@ -52,7 +52,11 @@ public class SeasonDao {
         document.append("startDate", this.startDate);
         document.append("endDate", this.endDate);
         document.append("tvSeriesOid", this.tvSeriesOid);
+        if(SeasonDao.oidExist(this.oid)){
+            db.getCollection(SEASON_COLLECTION).replaceOne(eq("oid", this.oid), document);
+        }else{
         db.getCollection(SEASON_COLLECTION).insertOne(document);
+        }
     }
 
     public static List<SeasonDao> loadAll(long tvSeriesOid) {
@@ -69,6 +73,11 @@ public class SeasonDao {
             allSeasonsOfATvSeriesOid.add(e);
         }
         return allSeasonsOfATvSeriesOid;
+    }
+
+    private static boolean oidExist(long oid) {
+        SeasonDao temp = new SeasonDao(oid);
+        return temp.getOid() == oid;
     }
 
     public List<EpisodeDao> loadEpisodes() {
@@ -124,5 +133,17 @@ public class SeasonDao {
 
     public long getTvSeriesOid() {
         return tvSeriesOid;
+    }
+
+    public void setSeasonNumber(int seasonNumber) {
+        this.seasonNumber = seasonNumber;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
