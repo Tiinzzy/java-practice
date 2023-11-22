@@ -270,6 +270,31 @@ public class GreetingController {
         return loadNew.getOid() == newTvSeries.getOid();
     }
 
+    @PostMapping("/tvseries/load-seasons")
+    public List<SeasonDao> loadTvSeriesSeasons(@RequestBody MyTvSeriesData data) {
+        TvSeriesDao loadTvSeries = new TvSeriesDao(data.getOid());
+        return loadTvSeries.loadSeasons();
+    }
+
+    @PostMapping("/tvseries/update")
+    public Boolean updateTvSeries(@RequestBody MyTvSeriesData data) {
+        TvSeriesDao loadTvSeries = new TvSeriesDao(data.getOid());
+        loadTvSeries.setTitle(data.getTitle());
+        loadTvSeries.setSummary(data.getSummary());
+        loadTvSeries.setStartDate(data.getStartDate());
+        loadTvSeries.setEndDate(data.getEndDate());
+        loadTvSeries.saveToTable();
+
+        if(data.getSeasonNumber()>0){
+            SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), loadTvSeries.getOid());
+            newSeason.saveToTable();
+
+            SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
+            return loadNewSeason.getOid() == newSeason.getOid();
+        }
+        return true;
+    }
+
     public static class MyTvSeriesData {
         private long oid;
         private String title;
