@@ -264,7 +264,7 @@ public class GreetingController {
 
         TvSeriesDao loadNew = new TvSeriesDao(newTvSeries.getOid());
 
-        if(data.getSeasonNumber()>0){
+        if (data.getSeasonNumber() > 0) {
             return loadNew.getOid() == newTvSeries.getOid() & loadNewSeason.getOid() == newSeason.getOid();
         }
         return loadNew.getOid() == newTvSeries.getOid();
@@ -285,12 +285,18 @@ public class GreetingController {
         loadTvSeries.setEndDate(data.getEndDate());
         loadTvSeries.saveToTable();
 
-        if(data.getSeasonNumber()>0){
+        if (data.getSeasonNumber() > 0 & data.getAction().equals("addNew")) {
             SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), loadTvSeries.getOid());
             newSeason.saveToTable();
 
             SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
             return loadNewSeason.getOid() == newSeason.getOid();
+        } else {
+            SeasonDao updateSeason = new SeasonDao(data.getSeasonOid());
+            updateSeason.setSeasonNumber(data.getSeasonNumber());
+            updateSeason.setEndDate(data.getSeasonEndDate());
+            updateSeason.setStartDate(data.getSeasonStartDate());
+            updateSeason.saveToTable();
         }
         return true;
     }
@@ -300,14 +306,26 @@ public class GreetingController {
         private String title;
         private String summary;
         private String startDate;
-        private String endDate ;
+        private String endDate;
         private int seasonNumber;
+
+        private String action;
 
         private String seasonStartDate;
         private String seasonEndDate;
 
+        private long seasonOid;
+
+        public long getSeasonOid() {
+            return seasonOid;
+        }
+
         public int getSeasonNumber() {
             return seasonNumber;
+        }
+
+        public String getAction() {
+            return action;
         }
 
         public String getSeasonStartDate() {
