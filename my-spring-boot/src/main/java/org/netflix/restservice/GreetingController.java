@@ -251,4 +251,41 @@ public class GreetingController {
         reloadSub.saveToTable();
         return true;
     }
+
+    @PostMapping("/tvseries/add")
+    public Boolean addTvSeries(@RequestBody MyTvSeriesData data) {
+        TvSeriesDao newTvSeries = new TvSeriesDao(data.getTitle(), data.getSummary(), data.getStartDate(), data.getEndDate());
+        newTvSeries.saveToTable();
+
+        TvSeriesDao loadNew = new TvSeriesDao(newTvSeries.getOid());
+        return loadNew.getOid() == newTvSeries.getOid();
+    }
+
+    public static class MyTvSeriesData {
+        private long oid;
+        private String title;
+        private String summary;
+        private String startDate;
+        private String endDate ;
+
+        public long getOid() {
+            return oid;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+    }
 }
