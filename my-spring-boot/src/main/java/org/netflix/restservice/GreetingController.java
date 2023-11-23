@@ -276,6 +276,12 @@ public class GreetingController {
         return loadTvSeries.loadSeasons();
     }
 
+    @PostMapping("/tvseries/delete")
+    public Boolean deleteTvSeries(@RequestBody MyTvSeriesData data) {
+        TvSeriesDao.delete(data.getOid());
+        return true;
+    }
+
     @PostMapping("/tvseries/update")
     public Boolean updateTvSeries(@RequestBody MyTvSeriesData data) {
         System.out.println(data.getAction());
