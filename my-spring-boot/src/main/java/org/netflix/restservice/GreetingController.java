@@ -257,15 +257,15 @@ public class GreetingController {
     public Boolean addTvSeries(@RequestBody MyTvSeriesData data) {
         TvSeriesDao newTvSeries = new TvSeriesDao(data.getTitle(), data.getSummary(), data.getStartDate(), data.getEndDate());
         newTvSeries.saveToTable();
-
-        SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), newTvSeries.getOid());
-        newSeason.saveToTable();
-        SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
-
         TvSeriesDao loadNew = new TvSeriesDao(newTvSeries.getOid());
 
-        if (data.getSeasonNumber() > 0) {
-            return loadNew.getOid() == newTvSeries.getOid() & loadNewSeason.getOid() == newSeason.getOid();
+        if (data.getAction().equals("addSeason")) {
+            SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), newTvSeries.getOid());
+            newSeason.saveToTable();
+            SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
+            if (data.getSeasonNumber() > 0) {
+                return loadNew.getOid() == newTvSeries.getOid() & loadNewSeason.getOid() == newSeason.getOid();
+            }
         }
         return loadNew.getOid() == newTvSeries.getOid();
     }
@@ -293,7 +293,7 @@ public class GreetingController {
 
             SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
             return loadNewSeason.getOid() == newSeason.getOid();
-        } else if(data.getSeasonNumber() > 0 & data.getAction().equals("update")) {
+        } else if (data.getSeasonNumber() > 0 & data.getAction().equals("update")) {
             System.out.println("here to update");
             SeasonDao updateSeason = new SeasonDao(data.getSeasonOid());
             updateSeason.setSeasonNumber(data.getSeasonNumber());
