@@ -278,6 +278,7 @@ public class GreetingController {
 
     @PostMapping("/tvseries/update")
     public Boolean updateTvSeries(@RequestBody MyTvSeriesData data) {
+        System.out.println(data.getAction());
         TvSeriesDao loadTvSeries = new TvSeriesDao(data.getOid());
         loadTvSeries.setTitle(data.getTitle());
         loadTvSeries.setSummary(data.getSummary());
@@ -286,12 +287,14 @@ public class GreetingController {
         loadTvSeries.saveToTable();
 
         if (data.getSeasonNumber() > 0 & data.getAction().equals("addNew")) {
+            System.out.println("here to add new");
             SeasonDao newSeason = new SeasonDao(data.getSeasonNumber(), data.getSeasonStartDate(), data.getSeasonEndDate(), loadTvSeries.getOid());
             newSeason.saveToTable();
 
             SeasonDao loadNewSeason = new SeasonDao(newSeason.getOid());
             return loadNewSeason.getOid() == newSeason.getOid();
-        } else {
+        } else if(data.getSeasonNumber() > 0 & data.getAction().equals("update")) {
+            System.out.println("here to update");
             SeasonDao updateSeason = new SeasonDao(data.getSeasonOid());
             updateSeason.setSeasonNumber(data.getSeasonNumber());
             updateSeason.setEndDate(data.getSeasonEndDate());
