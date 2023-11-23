@@ -135,9 +135,6 @@ public class TvSeriesDao {
     public static boolean delete(long oid) {
         var db = Database.INSTANCE.getNetflixDatabase();
         MongoCollection<Document> collection = db.getCollection(TV_SERIES_COLLECTION);
-        List<TvSeriesDao> allTvSeries = TvSeriesDao.loadAll();
-        for (TvSeriesDao tvSeries : allTvSeries) {
-            if (tvSeries.getOid() == oid) {
                 try {
                     TvSeriesDao.deleteSeasons(oid);
                     DeleteResult result = collection.deleteOne(eq("oid", oid));
@@ -147,9 +144,6 @@ public class TvSeriesDao {
                     System.err.println("Unable to delete due to an error: " + me);
                     return false;
                 }
-            }
-        }
-        return false;
     }
 
     public long getOid() {
