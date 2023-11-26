@@ -1,0 +1,38 @@
+MyDirectory {
+	String name;
+	List<MyDirectory> children = new ArrayList<MyDirectory>();
+	?? searchForSubdirectories() {}
+	toJson() {}
+}
+
+
+
+--------------------------------------
+MyDirectory {
+	String name;
+	List<MyDirectory> children = new ArrayList<MyDirectory>();
+	toJson() {}
+}
+
+
+DirectoryTree  {
+	String path;
+	List<MyDirectory> level0 = new ArrayList<MyDirectory>();
+
+	DirectoryTree(String path) {}'
+
+	void build() {
+	}
+
+	String toJson() {}
+
+}
+
+
+[
+
+{ "1", [ {"4", [] } ]},
+{ "2", [{"5", []}, {"6", [{"7", [{}, {}]}] }]
+
+
+]
