@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class Tests {
+public class TestsListQueue {
     private final Random random = new Random();
 
     Node getRandomNode() {
@@ -28,7 +28,7 @@ public class Tests {
         System.out.println(edge.getFrom());
         System.out.println(edge.getTo().label() + ", " + edge.getTo().weight());
 
-        Tests tests = new Tests();
+        TestsListQueue tests = new TestsListQueue();
         for (var i = 0; i < 10; i++) {
             System.out.println(tests.getRandomNode());
         }
@@ -60,7 +60,7 @@ public class Tests {
         }
     }
 
-    void testQueue() {
+    void testQueue1() {
         LocalDate today = LocalDate.now();
 //        Queue<LocalDate> queue = new ArrayDeque<>();
         Queue<LocalDate> queue = new PriorityQueue<>();
@@ -85,9 +85,35 @@ public class Tests {
         System.out.println(queue.size());
     }
 
+    void testQueue2() {
+        Queue<Integer> intQueue = new PriorityQueue<>();
+        for (int i = 0; i < 10; i++) {
+            intQueue.add(random.nextInt(100));
+        }
+//        intQueue.forEach(System.out::println);
+        for (int i = 0; i < 10; i++) {
+            Integer e = intQueue.poll();
+            System.out.println(e);
+        }
+
+        System.out.println();
+
+        Queue<Salary> salaryQueue = new PriorityQueue<>();
+        for (int i = 0; i < 10; i++) {
+            salaryQueue.add(new Salary(random.nextInt(100)));
+        }
+
+//        salaryQueue.forEach(System.out::println);
+        for (int i = 0; i < 10; i++) {
+            Salary s = salaryQueue.poll();
+            System.out.println(s);
+        }
+
+    }
+
     public static void main(String[] args) {
-        Tests tests = new Tests();
-        tests.testQueue();
+        TestsListQueue tests = new TestsListQueue();
+        tests.testQueue2();
     }
 }
 
