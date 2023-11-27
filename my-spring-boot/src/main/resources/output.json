@@ -1,0 +1,58 @@
+[
+    {
+        "children": [{
+            "children": [{
+                "children": [
+                    {
+                        "children": [],
+                        "name": "restservice"
+                    },
+                    {
+                        "children": [],
+                        "name": "data_structures"
+                    },
+                    {
+                        "children": [],
+                        "name": "directory_depth"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "name": "genre"
+                            },
+                            {
+                                "children": [],
+                                "name": "subscription"
+                            },
+                            {
+                                "children": [],
+                                "name": "movies"
+                            },
+                            {
+                                "children": [],
+                                "name": "customer"
+                            },
+                            {
+                                "children": [],
+                                "name": "tv_series"
+                            }
+                        ],
+                        "name": "model"
+                    },
+                    {
+                        "children": [],
+                        "name": "utility"
+                    }
+                ],
+                "name": "netflix"
+            }],
+            "name": "org"
+        }],
+        "name": "java"
+    },
+    {
+        "children": [],
+        "name": "resources"
+    }
+]
