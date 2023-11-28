@@ -369,13 +369,11 @@ public class GreetingController {
     }
 
     @PostMapping("/directory/path")
-    public JSONArray directoryPathSearch(@RequestBody MyDirectoryData data) {
+    public String directoryPathSearch(@RequestBody MyDirectoryData data) {
         DirectoryTree tree = new DirectoryTree(data.getPath());
         tree.buildTree(data.getDepth());
         tree.saveJsonToFile();
-//        tree.displayTree();
-        System.out.println(tree.toJson());
-        return tree.toJson();
+        return tree.toString();
     }
 
     public static class MyDirectoryData{
