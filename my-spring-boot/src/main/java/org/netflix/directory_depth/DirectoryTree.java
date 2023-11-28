@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class DirectoryTree {
+public class DirectoryTree {
     private final String output_path = "/home/tina/IdeaProjects/my-spring-boot/src/main/resources/output.json";
 
     private String path;

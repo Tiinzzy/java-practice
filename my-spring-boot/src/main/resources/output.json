@@ -16,28 +16,7 @@
                         "name": "directory_depth"
                     },
                     {
-                        "children": [
-                            {
-                                "children": [],
-                                "name": "genre"
-                            },
-                            {
-                                "children": [],
-                                "name": "subscription"
-                            },
-                            {
-                                "children": [],
-                                "name": "movies"
-                            },
-                            {
-                                "children": [],
-                                "name": "customer"
-                            },
-                            {
-                                "children": [],
-                                "name": "tv_series"
-                            }
-                        ],
+                        "children": [],
                         "name": "model"
                     },
                     {

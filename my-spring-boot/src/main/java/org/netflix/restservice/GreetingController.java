@@ -3,6 +3,8 @@ package org.netflix.restservice;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.json.JSONArray;
+import org.netflix.directory_depth.DirectoryTree;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
@@ -363,6 +365,29 @@ public class GreetingController {
 
         public String getEndDate() {
             return endDate;
+        }
+    }
+
+    @PostMapping("/directory/path")
+    public JSONArray directoryPathSearch(@RequestBody MyDirectoryData data) {
+        DirectoryTree tree = new DirectoryTree(data.getPath());
+        tree.buildTree(data.getDepth());
+        tree.saveJsonToFile();
+//        tree.displayTree();
+        System.out.println(tree.toJson());
+        return tree.toJson();
+    }
+
+    public static class MyDirectoryData{
+        private String path;
+        private int depth;
+
+        public String getPath() {
+            return path;
+        }
+
+        public int getDepth() {
+            return depth;
         }
     }
 }
