@@ -1,58 +1,256 @@
 [
     {
-        "children": [{
-            "children": [{
+        "children": [
+            {
+                "children": [{
+                    "children": [{
+                        "children": [{
+                            "children": [
+                                {
+                                    "children": [],
+                                    "name": "restservice"
+                                },
+                                {
+                                    "children": [],
+                                    "name": "genre"
+                                }
+                            ],
+                            "name": "netflix"
+                        }],
+                        "name": "org"
+                    }],
+                    "name": "java"
+                }],
+                "name": "test"
+            },
+            {
                 "children": [
                     {
-                        "children": [],
-                        "name": "restservice"
+                        "children": [{
+                            "children": [{
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "name": "restservice"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "data_structures"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "directory_depth"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "model"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "utility"
+                                    }
+                                ],
+                                "name": "netflix"
+                            }],
+                            "name": "org"
+                        }],
+                        "name": "java"
                     },
                     {
                         "children": [],
-                        "name": "data_structures"
-                    },
-                    {
-                        "children": [],
-                        "name": "directory_depth"
-                    },
-                    {
-                        "children": [
-                            {
-                                "children": [],
-                                "name": "genre"
-                            },
-                            {
-                                "children": [],
-                                "name": "subscription"
-                            },
-                            {
-                                "children": [],
-                                "name": "movies"
-                            },
-                            {
-                                "children": [],
-                                "name": "customer"
-                            },
-                            {
-                                "children": [],
-                                "name": "tv_series"
-                            }
-                        ],
-                        "name": "model"
-                    },
-                    {
-                        "children": [],
-                        "name": "utility"
+                        "name": "resources"
                     }
                 ],
-                "name": "netflix"
-            }],
-            "name": "org"
-        }],
-        "name": "java"
+                "name": "main"
+            }
+        ],
+        "name": "src"
     },
     {
         "children": [],
-        "name": "resources"
+        "name": ".idea"
+    },
+    {
+        "children": [
+            {
+                "children": [],
+                "name": "buildOutputCleanup"
+            },
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "name": "dependencies-accessors"
+                    },
+                    {
+                        "children": [],
+                        "name": "vcsMetadata"
+                    },
+                    {
+                        "children": [],
+                        "name": "checksums"
+                    },
+                    {
+                        "children": [],
+                        "name": "fileHashes"
+                    },
+                    {
+                        "children": [],
+                        "name": "executionHistory"
+                    },
+                    {
+                        "children": [],
+                        "name": "fileChanges"
+                    }
+                ],
+                "name": "7.4.2"
+            },
+            {
+                "children": [],
+                "name": "vcs-1"
+            }
+        ],
+        "name": ".gradle"
+    },
+    {
+        "children": [{
+            "children": [],
+            "name": "wrapper"
+        }],
+        "name": "gradle"
+    },
+    {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "name": "test"
+                    },
+                    {
+                        "children": [],
+                        "name": "compileJava"
+                    },
+                    {
+                        "children": [],
+                        "name": "compileTestJava"
+                    }
+                ],
+                "name": "tmp"
+            },
+            {
+                "children": [{
+                    "children": [{
+                        "children": [],
+                        "name": "binary"
+                    }],
+                    "name": "test"
+                }],
+                "name": "test-results"
+            },
+            {
+                "children": [{
+                    "children": [
+                        {
+                            "children": [{
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "name": "test"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "main"
+                                    }
+                                ],
+                                "name": "java"
+                            }],
+                            "name": "headers"
+                        },
+                        {
+                            "children": [{
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "name": "test"
+                                    },
+                                    {
+                                        "children": [],
+                                        "name": "main"
+                                    }
+                                ],
+                                "name": "java"
+                            }],
+                            "name": "annotationProcessor"
+                        }
+                    ],
+                    "name": "sources"
+                }],
+                "name": "generated"
+            },
+            {
+                "children": [{
+                    "children": [
+                        {
+                            "children": [{
+                                "children": [{
+                                    "children": [],
+                                    "name": "netflix"
+                                }],
+                                "name": "org"
+                            }],
+                            "name": "test"
+                        },
+                        {
+                            "children": [{
+                                "children": [{
+                                    "children": [],
+                                    "name": "netflix"
+                                }],
+                                "name": "org"
+                            }],
+                            "name": "main"
+                        }
+                    ],
+                    "name": "java"
+                }],
+                "name": "classes"
+            },
+            {
+                "children": [{
+                    "children": [{
+                        "children": [
+                            {
+                                "children": [],
+                                "name": "css"
+                            },
+                            {
+                                "children": [],
+                                "name": "js"
+                            },
+                            {
+                                "children": [],
+                                "name": "classes"
+                            },
+                            {
+                                "children": [],
+                                "name": "packages"
+                            }
+                        ],
+                        "name": "test"
+                    }],
+                    "name": "tests"
+                }],
+                "name": "reports"
+            },
+            {
+                "children": [{
+                    "children": [],
+                    "name": "main"
+                }],
+                "name": "resources"
+            }
+        ],
+        "name": "build"
     }
 ]
