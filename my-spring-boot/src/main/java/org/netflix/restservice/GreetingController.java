@@ -1,10 +1,8 @@
 package org.netflix.restservice;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.json.JSONArray;
 import org.netflix.directory_depth.DirectoryTree;
+import org.netflix.game_of_life.Board;
+import org.netflix.game_of_life.Torus;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
@@ -13,7 +11,13 @@ import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.SeasonDao;
 import org.netflix.model.tv_series.TvSeriesDao;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class GreetingController {
@@ -376,7 +380,7 @@ public class GreetingController {
         return tree.toString();
     }
 
-    public static class MyDirectoryData{
+    public static class MyDirectoryData {
         private String path;
         private int depth;
 
@@ -386,6 +390,70 @@ public class GreetingController {
 
         public int getDepth() {
             return depth;
+        }
+    }
+
+    Map<Integer, String> generations = new ConcurrentHashMap<>();
+
+    @PostMapping("/game-of-life")
+    public ResponseEntity<Void> gameOfLifeGrid(@RequestBody MyGameData data) {
+        new Thread(() -> {
+            Board board = new Torus(data.getWidth(), data.getHeight());
+            board.initialize(4);
+            for (int i = 0; i < data.getGenerations(); i++) {
+                board.evolve();
+                System.out.println(board.toJSON().toString());
+                generations.put(i, board.toJSON().toString());
+            }
+        }).start();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/generation/{id}")
+    public ResponseEntity<String> getGeneration(@PathVariable int id) {
+        if (generations.containsKey(id)) {
+            return ResponseEntity.ok(generations.get(id));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    Board golBoard = null;
+
+    @GetMapping("/gol/init/{row}/{column}/{initCount}")
+    public String golInit(@PathVariable int row, @PathVariable int column, @PathVariable int initCount) {
+        golBoard = new Torus(row, column);
+        golBoard.initialize(initCount);
+        return golBoard.toJSON().toString();
+    }
+
+    @GetMapping("/gol/evolve")
+    public String golEvolve() {
+        if (golBoard == null) {
+            return "{}";
+        } else {
+            golBoard.evolve();
+            return golBoard.toJSON().toString();
+        }
+    }
+
+    public static class MyGameData {
+
+        private int width;
+        private int height;
+
+        private int generations;
+
+        public int getGenerations() {
+            return generations;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
         }
     }
 }
