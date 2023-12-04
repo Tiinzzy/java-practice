@@ -1,7 +1,6 @@
 package org.netflix.game_of_life;
 
-import netscape.javascript.JSObject;
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public interface Board {
     void initialize(int count);
@@ -14,5 +13,5 @@ public interface Board {
 
     void evolve();
 
-    JSONArray toJSON();
+    JSONObject toJSON();
 }

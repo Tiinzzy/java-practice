@@ -2,6 +2,7 @@ package org.netflix.game_of_life;
 
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -12,6 +13,8 @@ public class Torus implements Board {
     private final int columnCount;
     private byte[][] board;
     private final Random random = new Random();
+
+    private int generation = 0;
 
     public Torus(int rowCount, int columnCount) {
         this.rowCount = rowCount;
@@ -80,6 +83,8 @@ public class Torus implements Board {
 
     @Override
     public void evolve() {
+        generation += 1;
+
         byte[][] nextGeneration = new byte[rowCount][columnCount];
         for (int r = 0; r < rowCount; r++) {
             for (int c = 0; c < columnCount; c++) {
@@ -103,22 +108,24 @@ public class Torus implements Board {
                         nextGeneration[r][c] = 0;
                     }
                 }
-
             }
         }
         board = nextGeneration;
     }
 
     @Override
-    public JSONArray toJSON() {
-        JSONArray jResult = new JSONArray();
+    public JSONObject toJSON() {
+        JSONArray jBoard = new JSONArray();
         for (int r = 0; r < rowCount; r++) {
             JSONArray jRow = new JSONArray();
             for (int c = 0; c < columnCount; c++) {
                 jRow.put(board[r][c]);
             }
-            jResult.put(jRow);
+            jBoard.put(jRow);
         }
+        JSONObject jResult = new JSONObject();
+        jResult.put("board", jBoard);
+        jResult.put("generation", generation);
         return jResult;
     }
 

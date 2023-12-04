@@ -14,13 +14,10 @@ import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.parsers.SAXParser;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
-import static org.netflix.game_of_life.Game.clearScreen;
 
 @RestController
 public class GreetingController {
@@ -404,13 +401,9 @@ public class GreetingController {
             Board board = new Torus(data.getWidth(), data.getHeight());
             board.initialize(4);
             for (int i = 0; i < data.getGenerations(); i++) {
-                try {
-                    Thread.sleep(300);
-                    board.evolve();
-                    generations.put(i, board.toJSON().toString());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                board.evolve();
+                System.out.println(board.toJSON().toString());
+                generations.put(i, board.toJSON().toString());
             }
         }).start();
         return ResponseEntity.ok().build();
@@ -425,12 +418,31 @@ public class GreetingController {
         }
     }
 
+    Board golBoard = null;
+
+    @GetMapping("/gol/init/{row}/{column}/{initCount}")
+    public String golInit(@PathVariable int row, @PathVariable int column, @PathVariable int initCount) {
+        golBoard = new Torus(row, column);
+        golBoard.initialize(initCount);
+        return golBoard.toJSON().toString();
+    }
+
+    @GetMapping("/gol/evolve")
+    public String golEvolve() {
+        if (golBoard == null) {
+            return "{}";
+        } else {
+            golBoard.evolve();
+            return golBoard.toJSON().toString();
+        }
+    }
+
     public static class MyGameData {
 
         private int width;
         private int height;
 
-        private  int generations;
+        private int generations;
 
         public int getGenerations() {
             return generations;
