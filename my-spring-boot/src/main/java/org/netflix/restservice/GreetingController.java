@@ -1,10 +1,8 @@
 package org.netflix.restservice;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.json.JSONArray;
 import org.netflix.directory_depth.DirectoryTree;
+import org.netflix.game_of_life.Board;
+import org.netflix.game_of_life.Torus;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
@@ -14,6 +12,12 @@ import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.SeasonDao;
 import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.parsers.SAXParser;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.netflix.game_of_life.Game.clearScreen;
 
 @RestController
 public class GreetingController {
@@ -376,7 +380,7 @@ public class GreetingController {
         return tree.toString();
     }
 
-    public static class MyDirectoryData{
+    public static class MyDirectoryData {
         private String path;
         private int depth;
 
@@ -386,6 +390,43 @@ public class GreetingController {
 
         public int getDepth() {
             return depth;
+        }
+    }
+
+    @PostMapping("/game-of-life")
+    public String gameOfLifeGrid(@RequestBody MyGameData data) {
+        Board board = new Torus(data.getWidth(), data.getHeight());
+        board.initialize(4);
+        for (int i = 0; i < data.getGenerations(); i++) {
+            try {
+                Thread.sleep(300);
+                board.evolve();
+                System.out.println(board.toJSON().toString());
+                return board.toJSON().toString();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+
+    public static class MyGameData {
+
+        private int width;
+        private int height;
+
+        private  int generations;
+
+        public int getGenerations() {
+            return generations;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
         }
     }
 }
