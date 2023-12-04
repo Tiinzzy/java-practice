@@ -11,10 +11,13 @@ import org.netflix.model.subscription.ESubscriptionType;
 import org.netflix.model.subscription.SubscriptionDao;
 import org.netflix.model.tv_series.SeasonDao;
 import org.netflix.model.tv_series.TvSeriesDao;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.parsers.SAXParser;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.netflix.game_of_life.Game.clearScreen;
@@ -393,21 +396,33 @@ public class GreetingController {
         }
     }
 
+    Map<Integer, String> generations = new ConcurrentHashMap<>();
+
     @PostMapping("/game-of-life")
-    public String gameOfLifeGrid(@RequestBody MyGameData data) {
-        Board board = new Torus(data.getWidth(), data.getHeight());
-        board.initialize(4);
-        for (int i = 0; i < data.getGenerations(); i++) {
-            try {
-                Thread.sleep(300);
-                board.evolve();
-                System.out.println(board.toJSON().toString());
-                return board.toJSON().toString();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    public ResponseEntity<Void> gameOfLifeGrid(@RequestBody MyGameData data) {
+        new Thread(() -> {
+            Board board = new Torus(data.getWidth(), data.getHeight());
+            board.initialize(4);
+            for (int i = 0; i < data.getGenerations(); i++) {
+                try {
+                    Thread.sleep(300);
+                    board.evolve();
+                    generations.put(i, board.toJSON().toString());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        }).start();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/generation/{id}")
+    public ResponseEntity<String> getGeneration(@PathVariable int id) {
+        if (generations.containsKey(id)) {
+            return ResponseEntity.ok(generations.get(id));
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return null;
     }
 
     public static class MyGameData {
