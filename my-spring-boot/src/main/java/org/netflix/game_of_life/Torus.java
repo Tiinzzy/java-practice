@@ -25,6 +25,9 @@ public class Torus implements Board {
     @Override
     public void initialize(int count) {
         int aliveCount = 0;
+        if (count >= rowCount * columnCount) {
+            count = (rowCount * columnCount) / 2;
+        }
         while (aliveCount != count) {
             int r = random.nextInt(rowCount);
             int c = random.nextInt(columnCount);
