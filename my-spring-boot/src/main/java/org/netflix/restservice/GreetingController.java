@@ -25,6 +25,9 @@ public class GreetingController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
+    Board golBoard = null;
+
+
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
@@ -178,10 +181,7 @@ public class GreetingController {
         newSub.saveToTable();
 
         SubscriptionDao loadNew = new SubscriptionDao(newSub.getOid());
-        if (loadNew.getOid() == newSub.getOid()) {
-            return true;
-        }
-        return false;
+        return loadNew.getOid() == newSub.getOid();
     }
 
     public static class MySubscriptionData {
@@ -395,20 +395,6 @@ public class GreetingController {
 
     Map<Integer, String> generations = new ConcurrentHashMap<>();
 
-    @PostMapping("/game-of-life")
-    public ResponseEntity<Void> gameOfLifeGrid(@RequestBody MyGameData data) {
-        new Thread(() -> {
-            Board board = new Torus(data.getWidth(), data.getHeight());
-            board.initialize(4);
-            for (int i = 0; i < data.getGenerations(); i++) {
-                board.evolve();
-                System.out.println(board.toJSON().toString());
-                generations.put(i, board.toJSON().toString());
-            }
-        }).start();
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/generation/{id}")
     public ResponseEntity<String> getGeneration(@PathVariable int id) {
         if (generations.containsKey(id)) {
@@ -418,12 +404,10 @@ public class GreetingController {
         }
     }
 
-    Board golBoard = null;
-
-    @GetMapping("/gol/init/{row}/{column}/{initCount}")
-    public String golInit(@PathVariable int row, @PathVariable int column, @PathVariable int initCount) {
-        golBoard = new Torus(row, column);
-        golBoard.initialize(initCount);
+    @PostMapping("/gol/init")
+    public String golInit(@RequestBody MyGameData data) {
+        golBoard = new Torus(data.getRow(), data.getColumn());
+        golBoard.initialize(data.getInitCount());
         return golBoard.toJSON().toString();
     }
 
@@ -433,27 +417,34 @@ public class GreetingController {
             return "{}";
         } else {
             golBoard.evolve();
+            System.out.println(golBoard.toJSON().toString());
             return golBoard.toJSON().toString();
         }
     }
 
     public static class MyGameData {
 
-        private int width;
-        private int height;
+        private int row;
+        private int column;
+
+        private int initCount;
 
         private int generations;
 
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public int getInitCount() {
+            return initCount;
+        }
+
         public int getGenerations() {
             return generations;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public int getHeight() {
-            return height;
         }
     }
 }
