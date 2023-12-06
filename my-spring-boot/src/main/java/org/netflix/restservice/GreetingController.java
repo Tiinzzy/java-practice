@@ -1,5 +1,7 @@
 package org.netflix.restservice;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.netflix.directory_depth.DirectoryTree;
 import org.netflix.game_of_life.Board;
 import org.netflix.game_of_life.Torus;
@@ -422,6 +424,25 @@ public class GreetingController {
         }
     }
 
+    @PostMapping("/gol/update")
+    public String golUpdateGrid(@RequestBody MyGameData data) {
+        golBoard = new Torus(data.getRow(), data.getColumn());
+        for (int r = 0; r < data.getRow(); r++) {
+            JSONArray row = data.getGrid().getJSONArray(r);
+            for (int c = 0; c < data.getColumn(); c++) {
+                int cellValue = row.getInt(c);
+                if (cellValue == 1) {
+                    golBoard.setCell(r, c);
+                }
+            }
+        }
+        System.out.println("------------------");
+        golBoard.display();
+        System.out.println("------------------");
+
+        return golBoard.toJSON().toString();
+    }
+
     public static class MyGameData {
 
         private int row;
@@ -430,6 +451,12 @@ public class GreetingController {
         private int initCount;
 
         private int generations;
+
+        private JSONArray grid;
+
+        public JSONArray getGrid() {
+            return grid;
+        }
 
         public int getRow() {
             return row;
