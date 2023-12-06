@@ -16,4 +16,8 @@ public interface Board {
     JSONObject toJSON();
 
     boolean getCellState(int row, int column);
+
+    int getRowCount();
+
+    int getColumnCount();
 }

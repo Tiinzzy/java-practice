@@ -425,11 +425,15 @@ public class GreetingController {
     }
 
     @PostMapping("/gol/update")
-    public String golUpdateGrid(@RequestBody MyGameData data) {
-        golBoard = new Torus(data.getRow(), data.getColumn());
-        for (int r = 0; r < data.getRow(); r++) {
-            JSONArray row = data.getGrid().getJSONArray(r);
-            for (int c = 0; c < data.getColumn(); c++) {
+    public String golUpdateGrid(@RequestBody String data) {
+        JSONObject jData = new JSONObject(data);
+
+        golBoard = new Torus(jData.optInt("row", 10), jData.optInt("column", 10));
+        JSONArray jGrid = jData.getJSONArray("grid");
+
+        for (int r = 0; r < golBoard.getRowCount(); r++) {
+            JSONArray row = jGrid.getJSONArray(r);
+            for (int c = 0; c < golBoard.getColumnCount(); c++) {
                 int cellValue = row.getInt(c);
                 if (cellValue == 1) {
                     golBoard.setCell(r, c);
@@ -452,9 +456,9 @@ public class GreetingController {
 
         private int generations;
 
-        private JSONArray grid;
+        private String grid;
 
-        public JSONArray getGrid() {
+        public String getGrid() {
             return grid;
         }
 
