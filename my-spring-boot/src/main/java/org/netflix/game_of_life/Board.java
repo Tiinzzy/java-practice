@@ -14,4 +14,10 @@ public interface Board {
     void evolve();
 
     JSONObject toJSON();
+
+    boolean getCellState(int row, int column);
+
+    int getRowCount();
+
+    int getColumnCount();
 }
