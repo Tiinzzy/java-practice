@@ -139,4 +139,16 @@ public class Torus implements Board {
         }
         return copy;
     }
+    @Override
+    public boolean getCellState(int row, int column) {
+        return board[row][column] == 1;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
 }
