@@ -2,6 +2,8 @@ package org.genetic_algoritm_i;
 
 import org.json.JSONObject;
 
+import org.json.JSONObject;
+
 public class Couple {
     Person p1;
     Person p2;
@@ -11,7 +13,7 @@ public class Couple {
         this.p2 = p2;
     }
 
-    JSONObject toJSON() {
+    public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("p1", p1.toJSON());
         jsonObject.put("p2", p2.toJSON());
