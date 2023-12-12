@@ -3,7 +3,7 @@ package org.genetic_algoritm_ii;
 import java.util.List;
 
 public interface Environment {
-    boolean canSurvive(Person person);
+    boolean canSurvive(Couple couple);
 
     List<Person> generateChildren(Couple couple);
 

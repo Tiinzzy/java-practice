@@ -10,11 +10,9 @@ public class Test {
     static List<Couple> getCouples(int coupleCount, Environment environment) {
         List<Couple> couples = new ArrayList<>();
         for (int i = 0; i < coupleCount; i++) {
-            Person p1 = new Person();
-            Person p2 = new Person();
-
-            if (environment.canSurvive(p1) && environment.canSurvive(p2)) {
-                couples.add(new Couple(p1, p2));
+            Couple c = new Couple(new Person(), new Person());
+            if (environment.canSurvive(c)) {
+                couples.add(c);
             }
         }
         return couples;
@@ -26,11 +24,9 @@ public class Test {
 
         for (int i = 0; i < generation.size(); i += 2) {
             if (i + 1 < generation.size()) {
-                Person p1 = generation.get(i);
-                Person p2 = generation.get(i + 1);
-
-                if (environment.canSurvive(p1) && environment.canSurvive(p2)) {
-                    couples.add(new Couple(p1, p2));
+                Couple c = new Couple(generation.get(i), generation.get(i + 1));
+                if (environment.canSurvive(c)) {
+                    couples.add(c);
                 }
             }
         }
