@@ -19,6 +19,4 @@ public class Config {
         LEVEL_TO_STR.put(2, "M");
         LEVEL_TO_STR.put(3, "H");
     }
-
-
 }
