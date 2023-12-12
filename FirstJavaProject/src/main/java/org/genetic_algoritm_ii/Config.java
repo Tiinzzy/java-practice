@@ -11,7 +11,9 @@ public class Config {
 
     static final int GENERATION_COUNT = 50;
 
+    static final int STRENGTH_THRESHOLD = 2;
 
+    static final int INTELLIGENCE_THRESHOLD = 2;
     final static Map<Integer, String> LEVEL_TO_STR = new HashMap<>();
 
     static {

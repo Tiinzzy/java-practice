@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 public class City implements Environment {
-    private static final int INTELLIGENCE_THRESHOLD = 2; // Threshold for intelligence
+
     private final Random random = new Random();
 
     @Override
     public boolean canSurvive(Person person) {
-        return person.intelligenceGene >= INTELLIGENCE_THRESHOLD;
+        return person.intelligenceGene >= Config.INTELLIGENCE_THRESHOLD;
     }
 
     @Override

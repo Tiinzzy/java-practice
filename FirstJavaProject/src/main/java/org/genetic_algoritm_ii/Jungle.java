@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 public class Jungle implements Environment {
-    private static final int STRENGTH_THRESHOLD = 2; // Threshold for strength
     private final Random random = new Random();
 
     @Override
     public boolean canSurvive(Person person) {
-        return person.strengthGene >= STRENGTH_THRESHOLD;
+        return person.strengthGene >= Config.STRENGTH_THRESHOLD;
     }
 
     @Override
