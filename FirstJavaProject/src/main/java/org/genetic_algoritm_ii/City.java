@@ -10,7 +10,7 @@ public class City implements Environment {
 
     @Override
     public boolean canSurvive(Person person) {
-        return person.intelligenceGene >= Config.INTELLIGENCE_THRESHOLD;
+        return (person.intelligenceGene >= Config.INTELLIGENCE_THRESHOLD && person.strengthGene <= Config.STRENGTH_THRESHOLD);
     }
 
     @Override

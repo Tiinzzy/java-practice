@@ -9,7 +9,8 @@ public class Jungle implements Environment {
 
     @Override
     public boolean canSurvive(Person person) {
-        return person.strengthGene >= Config.STRENGTH_THRESHOLD;
+
+        return (person.strengthGene >= Config.STRENGTH_THRESHOLD && person.intelligenceGene <= Config.INTELLIGENCE_THRESHOLD);
     }
 
     @Override
