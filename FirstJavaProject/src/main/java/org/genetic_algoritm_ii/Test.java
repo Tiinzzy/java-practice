@@ -13,7 +13,6 @@ public class Test {
             Person p1 = new Person();
             Person p2 = new Person();
 
-            // Assign couples to the environment based on their traits
             if (environment.canSurvive(p1) && environment.canSurvive(p2)) {
                 couples.add(new Couple(p1, p2));
             }
@@ -63,7 +62,6 @@ public class Test {
             cityCouples = getCouples(cityNextGen, city);
             jungleCouples = getCouples(jungleNextGen, jungle);
 
-            // Print Statistics for each environment
             System.out.println("City Stats: " + Statistics.getStat(cityCouples));
             System.out.println("Jungle Stats: " + Statistics.getStat(jungleCouples));
         }
