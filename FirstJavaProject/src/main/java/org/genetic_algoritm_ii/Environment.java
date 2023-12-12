@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface Environment {
     boolean canSurvive(Person person);
+
     List<Person> generateChildren(Couple couple);
+
 }
