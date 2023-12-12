@@ -11,6 +11,17 @@ public class Config {
 
     static final int GENERATION_COUNT = 50;
 
+    static final int JUNGLE_MIN_STRENGTH_THRESHOLD = 2;
+
+    static final int JUNGLE_MAX_INTELLIGENCE_THRESHOLD = 2;
+
+    static final int JUNGLE_DEATH_PERCENTAGE = 40;
+
+    static final int CITY_MAX_STRENGTH_THRESHOLD = 1;
+
+    static final int CITY_MIN_INTELLIGENCE_THRESHOLD = 2;
+
+    static final int CITY_DEATH_PERCENTAGE = 40;
 
     final static Map<Integer, String> LEVEL_TO_STR = new HashMap<>();
 
@@ -19,6 +30,4 @@ public class Config {
         LEVEL_TO_STR.put(2, "M");
         LEVEL_TO_STR.put(3, "H");
     }
-
-
 }
