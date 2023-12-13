@@ -1,7 +1,4 @@
-package org.gravity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+package org.gravity_i;
 
 public class Test {
     public static void main(String[] args) {

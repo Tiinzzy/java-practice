@@ -1,12 +1,8 @@
-package org.gravity;
+package org.gravity_i;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Random;
-
-import java.util.Random;
-import org.json.JSONObject;
 
 public class Graph {
     private final int[][] matrix;

@@ -1,11 +1,58 @@
 {
-  "Low Intelligence - High Strength": 4,
-  "Medium Intelligence - Low Strength": 1,
-  "High Intelligence - Low Strength": 1,
-  "Low Intelligence - Low Strength": 4,
-  "Medium Intelligence - High Strength": 3,
-  "Low Intelligence - Medium Strength": 2,
-  "Medium Intelligence - Medium Strength": 1,
-  "High Intelligence - Medium Strength": 3,
-  "High Intelligence - High Strength": 1
+  "size": 100,
+  "comment": "This universe is 100 by 100",
+  "time": 0,
+  "particles": [
+    [
+      5.0767126,
+      52.790363,
+      1
+    ],
+    [
+      90.83469,
+      85.23067,
+      1
+    ],
+    [
+      26.819414,
+      54.503357,
+      1
+    ],
+    [
+      52.19487,
+      48.445465,
+      1
+    ],
+    [
+      14.404935,
+      9.792936,
+      1
+    ],
+    [
+      99.65339,
+      22.96896,
+      1
+    ],
+    [
+      42.42418,
+      14.377433,
+      1
+    ],
+    [
+      79.27825,
+      97.86137,
+      1
+    ],
+    [
+      95.14005,
+      14.642662,
+      1
+    ],
+    [
+      52.88614,
+      94.23966,
+      1
+    ]
+  ],
+  "particleCount": 10
 }
