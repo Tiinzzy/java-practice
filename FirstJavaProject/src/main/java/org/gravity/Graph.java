@@ -52,4 +52,35 @@ public class Graph {
         }
     }
 
+    public void merge() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                mergeIfPossible(i, j);
+            }
+        }
+    }
+
+    private void mergeIfPossible(int x, int y) {
+        int currentValue = matrix[x][y];
+        if (currentValue == 0) return;
+
+        if (isInBounds(x - 1, y) && matrix[x - 1][y] == currentValue) {
+            matrix[x][y] += matrix[x - 1][y];
+            matrix[x - 1][y] = 0;
+        } else if (isInBounds(x + 1, y) && matrix[x + 1][y] == currentValue) {
+            matrix[x][y] += matrix[x + 1][y];
+            matrix[x + 1][y] = 0;
+        } else if (isInBounds(x, y - 1) && matrix[x][y - 1] == currentValue) {
+            matrix[x][y] += matrix[x][y - 1];
+            matrix[x][y - 1] = 0;
+        } else if (isInBounds(x, y + 1) && matrix[x][y + 1] == currentValue) {
+            matrix[x][y] += matrix[x][y + 1];
+            matrix[x][y + 1] = 0;
+        }
+    }
+
+    private boolean isInBounds(int x, int y) {
+        return x >= 0 && x < SIZE && y >= 0 && y < SIZE;
+    }
+
 }
