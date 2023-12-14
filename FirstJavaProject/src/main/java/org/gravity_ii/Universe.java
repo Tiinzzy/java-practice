@@ -3,9 +3,7 @@ package org.gravity_ii;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Universe {
     private final Random random = new Random();
@@ -35,22 +33,68 @@ public class Universe {
 
     void tick() {
         time += 1;
-
         calculateForces();
-
-        mergeParticles();
+        particles = removeDuplicatedAndMerge();
     }
 
     void mergeParticles() {
-        // we need to sort particles based on nearestForce
+        List<Particle> newParticles = new ArrayList<>();
+        Set<Particle> merged = new HashSet<>();
 
-        // STEP 1 remove duplicates   A -> B is the same as B -> A, remove the second one
-        // you need a function canBeMerged()
+        for (Particle p1 : particles) {
+            if (merged.contains(p1)) {
+                continue;
+            }
 
-        // STEP 2 loop over result of STEP 1
-        // if canBeMerged merge two particles and add them to a new list
-        // if not just add the source particle to the list
+            Particle strongest = null;
+            float maxForce = 0;
 
+            for (Particle p2 : particles) {
+                if (p1 != p2 && !merged.contains(p2)) {
+                    float force = Physics.getForce(p1, p2);
+                    if (force > maxForce) {
+                        maxForce = force;
+                        strongest = p2;
+                    }
+                }
+            }
+
+            if (strongest != null && canBeMerged(maxForce)) {
+                Particle mergedParticle = Physics.getMergedParticle(p1, strongest);
+                newParticles.add(mergedParticle);
+                merged.add(strongest);
+                merged.add(p1);
+            } else if (!merged.contains(p1)) {
+                newParticles.add(p1);
+            }
+        }
+
+        particles = newParticles;
+    }
+
+    boolean canBeMerged(float force) {
+        float mergeForceThreshold = 0.5F;
+        return force >= mergeForceThreshold;
+    }
+
+    List<Particle> removeDuplicatedAndMerge() {
+        Set<Particle> noDuplicate = new HashSet<>();
+
+        for (Particle p : particles) {
+            if (p.y < 0) {
+                continue;
+            } else if (p.y >= 0 && p.nearest.y < 0) {
+                Particle np = Physics.copy(p);
+                noDuplicate.add(np);
+                Physics.vanishParticles(p, p.nearest);
+            } else if (!noDuplicate.contains(p) && !noDuplicate.contains(p.nearest)) {
+                Particle np = Physics.getMergedParticle(p, p.nearest);
+                noDuplicate.add(np);
+                Physics.vanishParticles(p, p.nearest);
+            }
+        }
+
+        return noDuplicate.stream().toList();
     }
 
     void calculateForces() {
