@@ -7,8 +7,6 @@ public class Test {
         u.init(10);
         System.out.println(u.toJSON());
         u.tick();
-        u.tick();
-        u.tick();
         System.out.println(u.toJSON());
     }
 }
