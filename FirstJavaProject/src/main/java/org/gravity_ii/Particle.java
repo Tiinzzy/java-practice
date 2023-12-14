@@ -10,12 +10,12 @@ public class Particle {
     Particle nearest = null;
     float nearestForce = 0;
 
-    public Particle(float x, float y) {
+    Particle(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public Particle(float x, float y, float m) {
+    Particle(float x, float y, float m) {
         this.x = x;
         this.y = y;
         this.m = m;
@@ -28,4 +28,6 @@ public class Particle {
         jsonArray.put(m);
         return jsonArray;
     }
+
+
 }

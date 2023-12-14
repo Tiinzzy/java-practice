@@ -34,7 +34,7 @@ public class Universe {
     void tick() {
         time += 1;
         calculateForces();
-        mergeParticles();
+        particles = removeDuplicatedAndMerge();
     }
 
     void mergeParticles() {
@@ -68,6 +68,7 @@ public class Universe {
                 newParticles.add(p1);
             }
         }
+
         particles = newParticles;
     }
 
@@ -76,6 +77,25 @@ public class Universe {
         return force >= mergeForceThreshold;
     }
 
+    List<Particle> removeDuplicatedAndMerge() {
+        Set<Particle> noDuplicate = new HashSet<>();
+
+        for (Particle p : particles) {
+            if (p.y < 0) {
+                continue;
+            } else if (p.y >= 0 && p.nearest.y < 0) {
+                Particle np = Physics.copy(p);
+                noDuplicate.add(np);
+                Physics.vanishParticles(p, p.nearest);
+            } else if (!noDuplicate.contains(p) && !noDuplicate.contains(p.nearest)) {
+                Particle np = Physics.getMergedParticle(p, p.nearest);
+                noDuplicate.add(np);
+                Physics.vanishParticles(p, p.nearest);
+            }
+        }
+
+        return noDuplicate.stream().toList();
+    }
 
     void calculateForces() {
         for (Particle p : particles) {
