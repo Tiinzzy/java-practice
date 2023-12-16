@@ -1,7 +1,7 @@
-package org.netflix.restservice;
+package org.netflix.rest_services;
 
-public record Greeting(long id, String content) {
-    public Greeting(long id, String content) {
+public record RestAPI(long id, String content) {
+    public RestAPI(long id, String content) {
         this.id = id;
         this.content = content;
     }

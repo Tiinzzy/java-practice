@@ -1,10 +1,11 @@
-package org.netflix.restservice;
+package org.netflix.rest_services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.netflix.directory_depth.DirectoryTree;
 import org.netflix.game_of_life.Board;
 import org.netflix.game_of_life.Torus;
+import org.netflix.gravity.Universe;
 import org.netflix.model.customer.CustomerDao;
 import org.netflix.model.genre.GenreDao;
 import org.netflix.model.movies.MovieDao;
@@ -22,17 +23,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-public class GreetingController {
+public class RestAPIController {
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
     Board golBoard = null;
+    Universe universe = null;
 
 
     @GetMapping("/greeting")
-    public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    public RestAPI greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return new RestAPI(counter.incrementAndGet(), String.format(template, name));
     }
 
     @GetMapping("/genre/{id}")
@@ -477,5 +479,22 @@ public class GreetingController {
         public int getGenerations() {
             return generations;
         }
+    }
+
+    @GetMapping("/gravity/init/size/{spaceSize}/count/{count}")
+    public String getInitSpace(@PathVariable int spaceSize, @PathVariable int count) {
+        universe = new Universe(spaceSize);
+        universe.init(count);
+        return universe.toJSON().toString();
+    }
+
+    @GetMapping("/gravity/tick")
+    public String getInitSpace() {
+        if (universe == null) {
+            universe = new Universe(100);
+            universe.init(50);
+        }
+        universe.tick();
+        return universe.toJSON().toString();
     }
 }
