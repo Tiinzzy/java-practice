@@ -1,4 +1,4 @@
-package org.gravity_ii;
+package org.netflix.gravity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,21 +17,21 @@ public class Universe {
         this.size = size;
     }
 
-    void init(int particleCount) {
+    public void init(int particleCount) {
         for (int i = 0; i < particleCount; i++) {
             particles.add(new Particle(getRandomX(), getRandomY()));
         }
     }
 
     float getRandomX() {
-        return random.nextFloat((float) size);
+        return 1 + random.nextFloat((float) (size-3));
     }
 
     float getRandomY() {
-        return random.nextFloat((float) size);
+        return 1 + random.nextFloat((float) (size-3));
     }
 
-    void tick() {
+    public void tick() {
         if (particles.size() > 1) {
             time += 1;
             calculateForces();
@@ -80,6 +80,9 @@ public class Universe {
     }
 
     List<Particle> removeDuplicatedAndMerge() {
+        return removeDuplicatedAndMerge(particles);
+    }
+    List<Particle> removeDuplicatedAndMerge(List<Particle> particles) {
         Set<Particle> noDuplicate = new HashSet<>();
 
         for (Particle p : particles) {
@@ -121,12 +124,29 @@ public class Universe {
         return nearest;
     }
 
-    JSONObject toJSON() {
+    JSONArray getTobeMerged() {
+        JSONArray jsonArray = new JSONArray();
+        for (Particle p: particles) {
+            Particle n = getStrongestParticleNearMe(p);
+            if (n != null) {
+                JSONArray jP1 = new JSONArray();
+                jP1.put(p.x);
+                jP1.put(p.y);
+                jP1.put(n.x);
+                jP1.put(n.y);
+                jsonArray.put(jP1);
+            }
+        }
+        return jsonArray;
+    }
+
+    public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("size", size);
         jsonObject.put("comment", "This universe is %d by %d".formatted(size, size));
         jsonObject.put("time", time);
         jsonObject.put("particleCount", particles.size());
+        jsonObject.put("tobeMerged", getTobeMerged());
 
         JSONArray jMass = new JSONArray();
         for (Particle m : particles) {

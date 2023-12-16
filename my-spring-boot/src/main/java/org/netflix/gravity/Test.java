@@ -1,4 +1,4 @@
-package org.gravity_ii;
+package org.netflix.gravity;
 
 public class Test {
 
