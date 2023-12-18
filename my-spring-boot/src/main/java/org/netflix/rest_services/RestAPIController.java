@@ -2,6 +2,7 @@ package org.netflix.rest_services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.netflix.ant_simulation.LangstonAnt;
 import org.netflix.directory_depth.DirectoryTree;
 import org.netflix.game_of_life.Board;
 import org.netflix.game_of_life.Torus;
@@ -31,6 +32,7 @@ public class RestAPIController {
     Board golBoard = null;
     Universe universe = null;
 
+    LangstonAnt langstonAnt = null;
 
     @GetMapping("/greeting")
     public RestAPI greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
@@ -482,19 +484,33 @@ public class RestAPIController {
     }
 
     @GetMapping("/gravity/init/size/{spaceSize}/count/{count}")
-    public String getInitSpace(@PathVariable int spaceSize, @PathVariable int count) {
+    public String gravityInitSpace(@PathVariable int spaceSize, @PathVariable int count) {
         universe = new Universe(spaceSize);
         universe.init(count);
         return universe.toJSON().toString();
     }
 
     @GetMapping("/gravity/tick")
-    public String getInitSpace() {
+    public String gravityTick() {
         if (universe == null) {
             universe = new Universe(100);
             universe.init(50);
         }
         universe.tick();
         return universe.toJSON().toString();
+    }
+
+    @GetMapping("/langtons-ant/tick")
+    public String getNextHouse() {
+        if (langstonAnt == null) {
+            langstonAnt = new LangstonAnt();
+        }
+
+        int steps = 100;
+        for (int i = 0; i < steps-1; i++) {
+            langstonAnt.nextMove();
+        }
+
+        return langstonAnt.nextMove().toString();
     }
 }
