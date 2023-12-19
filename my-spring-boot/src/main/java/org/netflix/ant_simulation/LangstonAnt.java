@@ -1,21 +1,22 @@
 package org.netflix.ant_simulation;
 
 // TODO:
-//  1- grid/board size
-//  2- steps/tick
 //  3- what if ant hits boarders, handle as torus/donat!?
-//  4- N => E => S => W =>
 //  5- num of ants (last change)  <= you need a better design
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class LangstonAnt {
     private final int GRID_SIZE;
     private final boolean[][] grid;
     private int x;
     private int y;
-    private Direction direction = Direction.NORTH;
+    private List<Direction> directions;
+    private int dirIndex = 0;
 
     private int steps = 0;
 
@@ -24,6 +25,12 @@ public class LangstonAnt {
         this.grid = new boolean[GRID_SIZE][GRID_SIZE];
         this.x = GRID_SIZE / 2;
         this.y = GRID_SIZE / 2;
+
+        this.directions = new LinkedList<>();
+        this.directions.add(Direction.NORTH);
+        this.directions.add(Direction.EAST);
+        this.directions.add(Direction.SOUTH);
+        this.directions.add(Direction.WEST);
     }
 
     public JSONObject nextMove() {
@@ -38,41 +45,15 @@ public class LangstonAnt {
     }
 
     private void turnRight() {
-        switch (direction) {
-            case NORTH:
-                direction = Direction.EAST;
-                break;
-            case EAST:
-                direction = Direction.SOUTH;
-                break;
-            case SOUTH:
-                direction = Direction.WEST;
-                break;
-            case WEST:
-                direction = Direction.NORTH;
-                break;
-        }
+        dirIndex = (dirIndex + 1) % directions.size();
     }
 
     private void turnLeft() {
-        switch (direction) {
-            case NORTH:
-                direction = Direction.WEST;
-                break;
-            case WEST:
-                direction = Direction.SOUTH;
-                break;
-            case SOUTH:
-                direction = Direction.EAST;
-                break;
-            case EAST:
-                direction = Direction.NORTH;
-                break;
-        }
+        dirIndex = (dirIndex - 1 + directions.size()) % directions.size();
     }
 
     private void moveForward() {
-        switch (direction) {
+        switch (directions.get(dirIndex)) {
             case NORTH:
                 y--;
                 break;
@@ -104,8 +85,8 @@ public class LangstonAnt {
             gridArray.put(rowArray);
         }
 
-        resultObject.put("steps",this.steps);
-        resultObject.put("data",gridArray);
+        resultObject.put("steps", this.steps);
+        resultObject.put("data", gridArray);
         return resultObject;
     }
 }
