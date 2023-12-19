@@ -512,4 +512,12 @@ public class RestAPIController {
 
         return langstonAnt.nextMove().toString();
     }
+
+    @GetMapping("/langtons-ant/reset")
+    public String resetLangtonGrid() {
+        langstonAnt = null;
+        JSONObject result = new JSONObject();
+        result.put("grid", "reset");
+        return result.toString();
+    }
 }
