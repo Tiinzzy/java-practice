@@ -452,7 +452,6 @@ public class RestAPIController {
     }
 
     public static class MyGameData {
-
         private int row;
         private int column;
 
@@ -502,6 +501,7 @@ public class RestAPIController {
 
     @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}")
     public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps) {
+        System.out.println(steps);
         if (langstonAnt == null) {
             langstonAnt = new LangstonAnt(boardSize);
         }
