@@ -500,14 +500,13 @@ public class RestAPIController {
         return universe.toJSON().toString();
     }
 
-    @GetMapping("/langtons-ant/tick")
-    public String getNextHouse() {
+    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}")
+    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps) {
         if (langstonAnt == null) {
-            langstonAnt = new LangstonAnt();
+            langstonAnt = new LangstonAnt(boardSize);
         }
 
-        int steps = 100;
-        for (int i = 0; i < steps-1; i++) {
+        for (int i = 0; i < steps - 1; i++) {
             langstonAnt.nextMove();
         }
 
