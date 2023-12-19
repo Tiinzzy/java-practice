@@ -12,7 +12,7 @@ import java.util.List;
 
 public class LangstonAnt {
     private final int GRID_SIZE;
-    private final boolean[][] grid;
+    private final Torus grid;
     private int x;
     private int y;
     private List<Direction> directions;
@@ -22,19 +22,19 @@ public class LangstonAnt {
 
     public LangstonAnt(int GRID_SIZE) {
         this.GRID_SIZE = GRID_SIZE;
-        this.grid = new boolean[GRID_SIZE][GRID_SIZE];
+        this.grid = new Torus(GRID_SIZE);
         this.x = GRID_SIZE / 2;
         this.y = GRID_SIZE / 2;
 
-        this.directions = new LinkedList<>();
-        this.directions.add(Direction.NORTH);
-        this.directions.add(Direction.EAST);
-        this.directions.add(Direction.SOUTH);
-        this.directions.add(Direction.WEST);
+        directions = new LinkedList<>();
+        directions.add(Direction.NORTH);
+        directions.add(Direction.EAST);
+        directions.add(Direction.SOUTH);
+        directions.add(Direction.WEST);
     }
 
     public JSONObject nextMove() {
-        if (grid[x][y]) {
+        if (grid.getColor(x, y)) {
             turnRight();
         } else {
             turnLeft();
@@ -55,32 +55,32 @@ public class LangstonAnt {
     private void moveForward() {
         switch (directions.get(dirIndex)) {
             case NORTH:
-                y--;
+                y = grid.wrapCoordinate(y - 1);
                 break;
             case EAST:
-                x++;
+                x = grid.wrapCoordinate(x + 1);
                 break;
             case SOUTH:
-                y++;
+                y = grid.wrapCoordinate(y + 1);
                 break;
             case WEST:
-                x--;
+                x = grid.wrapCoordinate(x - 1);
                 break;
         }
     }
 
     private void flipColor() {
-        grid[x][y] = !grid[x][y];
+        grid.flipColor(x, y);
     }
 
     public JSONObject toJSON() {
         JSONObject resultObject = new JSONObject();
         this.steps = this.steps + 1;
         JSONArray gridArray = new JSONArray();
-        for (boolean[] row : grid) {
+        for (int i = 0; i < GRID_SIZE; i++) {
             JSONArray rowArray = new JSONArray();
-            for (boolean cell : row) {
-                rowArray.put(cell ? 1 : 0);
+            for (int j = 0; j < GRID_SIZE; j++) {
+                rowArray.put(grid.getColor(i, j) ? 1 : 0);
             }
             gridArray.put(rowArray);
         }
