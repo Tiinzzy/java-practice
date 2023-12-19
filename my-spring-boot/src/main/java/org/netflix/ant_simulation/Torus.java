@@ -10,14 +10,14 @@ public class Torus {
     }
 
     public void flipColor(int x, int y) {
-        grid[x][y] = !grid[x][y];
+        this.grid[x][y] = !this.grid[x][y];
     }
 
     public boolean getColor(int x, int y) {
-        return grid[x][y];
+        return this.grid[x][y];
     }
 
     public int wrapCoordinate(int coordinate) {
-        return (coordinate + size) % size;
+        return (coordinate + this.size) % this.size;
     }
 }

@@ -26,11 +26,11 @@ public class LangstonAnt {
         this.x = GRID_SIZE / 2;
         this.y = GRID_SIZE / 2;
 
-        directions = new LinkedList<>();
-        directions.add(Direction.NORTH);
-        directions.add(Direction.EAST);
-        directions.add(Direction.SOUTH);
-        directions.add(Direction.WEST);
+        this.directions = new LinkedList<>();
+        this.directions.add(Direction.NORTH);
+        this.directions.add(Direction.EAST);
+        this.directions.add(Direction.SOUTH);
+        this.directions.add(Direction.WEST);
     }
 
     public JSONObject nextMove() {
