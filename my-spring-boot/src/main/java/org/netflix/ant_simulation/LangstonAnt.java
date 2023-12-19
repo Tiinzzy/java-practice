@@ -8,15 +8,25 @@ package org.netflix.ant_simulation;
 //  5- num of ants (last change)  <= you need a better design
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class LangstonAnt {
-    private static final int GRID_SIZE = 100;
-    private final boolean[][] grid = new boolean[GRID_SIZE][GRID_SIZE];
-    private int x = GRID_SIZE / 2;
-    private int y = GRID_SIZE / 2;
+    private final int GRID_SIZE;
+    private final boolean[][] grid;
+    private int x;
+    private int y;
     private Direction direction = Direction.NORTH;
 
-    public JSONArray nextMove() {
+    private int steps = 0;
+
+    public LangstonAnt(int GRID_SIZE) {
+        this.GRID_SIZE = GRID_SIZE;
+        this.grid = new boolean[GRID_SIZE][GRID_SIZE];
+        this.x = GRID_SIZE / 2;
+        this.y = GRID_SIZE / 2;
+    }
+
+    public JSONObject nextMove() {
         if (grid[x][y]) {
             turnRight();
         } else {
@@ -82,7 +92,9 @@ public class LangstonAnt {
         grid[x][y] = !grid[x][y];
     }
 
-    public JSONArray toJSON() {
+    public JSONObject toJSON() {
+        JSONObject resultObject = new JSONObject();
+        this.steps = this.steps + 1;
         JSONArray gridArray = new JSONArray();
         for (boolean[] row : grid) {
             JSONArray rowArray = new JSONArray();
@@ -91,6 +103,9 @@ public class LangstonAnt {
             }
             gridArray.put(rowArray);
         }
-        return gridArray;
+
+        resultObject.put("steps",this.steps);
+        resultObject.put("data",gridArray);
+        return resultObject;
     }
 }
