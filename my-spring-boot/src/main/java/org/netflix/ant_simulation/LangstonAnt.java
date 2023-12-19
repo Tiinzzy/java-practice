@@ -7,37 +7,49 @@ package org.netflix.ant_simulation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class LangstonAnt {
     private final int GRID_SIZE;
     private final Torus grid;
-    private int x;
-    private int y;
-    private List<Direction> directions;
-    private int dirIndex = 0;
-
+    private int x1;
+    private int y1;
     private int steps = 0;
 
-    public LangstonAnt(int GRID_SIZE) {
-        this.GRID_SIZE = GRID_SIZE;
-        this.grid = new Torus(GRID_SIZE);
-        this.x = GRID_SIZE / 2;
-        this.y = GRID_SIZE / 2;
+//    private final List<Direction> directions = new LinkedList<>();
+//    private int dirIndex = 0;
 
-        this.directions = new LinkedList<>();
-        this.directions.add(Direction.NORTH);
-        this.directions.add(Direction.EAST);
-        this.directions.add(Direction.SOUTH);
-        this.directions.add(Direction.WEST);
+    private Direction current;
+
+    public LangstonAnt(int gridSize) {
+        this.GRID_SIZE = gridSize;
+        this.grid = new Torus(gridSize);
+        this.x1 = gridSize / 2;
+        this.y1 = gridSize / 2;
+
+//        this.directions.add(new Direction((x) -> (x), (y) -> (y - 1)));     // North
+//        this.directions.add(new Direction((x) -> (x + 1), (y) -> (y)));     // East
+//        this.directions.add(new Direction((x) -> (x), (y) -> (y + 1)));     // South
+//        this.directions.add(new Direction((x) -> (x - 1), (y) -> (y)));     // West
+
+        Direction north = new Direction((x) -> (x), (y) -> (y - 1));
+        Direction east = new Direction((x) -> (x + 1), (y) -> (y));
+        Direction south = new Direction((x) -> (x), (y) -> (y + 1));
+        Direction west = new Direction((x) -> (x - 1), (y) -> (y));
+
+        north.setNeighbours(west, east);
+        east.setNeighbours(north, south);
+        south.setNeighbours(east, west);
+        west.setNeighbours(south, north);
+
+        current = north;
     }
 
     public JSONObject nextMove() {
-        if (grid.getColor(x, y)) {
-            turnRight();
+        if (grid.getColor(x1, y1)) {
+//            turnRight();
+            current = current.right;
         } else {
-            turnLeft();
+//            turnLeft();
+            current = current.left;
         }
         flipColor();
         moveForward();
@@ -45,32 +57,23 @@ public class LangstonAnt {
     }
 
     private void turnRight() {
-        dirIndex = (dirIndex + 1) % directions.size();
+//        dirIndex = (dirIndex + 1) % directions.size();
     }
 
     private void turnLeft() {
-        dirIndex = (dirIndex - 1 + directions.size()) % directions.size();
+//        dirIndex = (dirIndex - 1 + directions.size()) % directions.size();
     }
 
     private void moveForward() {
-        switch (directions.get(dirIndex)) {
-            case NORTH:
-                y = grid.wrapCoordinate(y - 1);
-                break;
-            case EAST:
-                x = grid.wrapCoordinate(x + 1);
-                break;
-            case SOUTH:
-                y = grid.wrapCoordinate(y + 1);
-                break;
-            case WEST:
-                x = grid.wrapCoordinate(x - 1);
-                break;
-        }
+//        y = grid.wrapCoordinate(directions.get(dirIndex).getY(y));
+//        x = grid.wrapCoordinate(directions.get(dirIndex).getX(x));
+
+        y1 = grid.wrapCoordinate(current.getY(y1));
+        x1 = grid.wrapCoordinate(current.getX(x1));
     }
 
     private void flipColor() {
-        grid.flipColor(x, y);
+        grid.flipColor(x1, y1);
     }
 
     public JSONObject toJSON() {
