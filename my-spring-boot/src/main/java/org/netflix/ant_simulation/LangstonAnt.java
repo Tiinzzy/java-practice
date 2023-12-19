@@ -1,26 +1,55 @@
 package org.netflix.ant_simulation;
 
 // TODO:
-//  1- grid/board size
-//  2- steps/tick
 //  3- what if ant hits boarders, handle as torus/donat!?
-//  4- N => E => S => W =>
 //  5- num of ants (last change)  <= you need a better design
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class LangstonAnt {
-    private static final int GRID_SIZE = 100;
-    private final boolean[][] grid = new boolean[GRID_SIZE][GRID_SIZE];
-    private int x = GRID_SIZE / 2;
-    private int y = GRID_SIZE / 2;
-    private Direction direction = Direction.NORTH;
+    private final int GRID_SIZE;
+    private final Torus grid;
+    private int x1;
+    private int y1;
+    private int steps = 0;
 
-    public JSONArray nextMove() {
-        if (grid[x][y]) {
-            turnRight();
+//    private final List<Direction> directions = new LinkedList<>();
+//    private int dirIndex = 0;
+
+    private Direction current;
+
+    public LangstonAnt(int gridSize) {
+        this.GRID_SIZE = gridSize;
+        this.grid = new Torus(gridSize);
+        this.x1 = gridSize / 2;
+        this.y1 = gridSize / 2;
+
+//        this.directions.add(new Direction((x) -> (x), (y) -> (y - 1)));     // North
+//        this.directions.add(new Direction((x) -> (x + 1), (y) -> (y)));     // East
+//        this.directions.add(new Direction((x) -> (x), (y) -> (y + 1)));     // South
+//        this.directions.add(new Direction((x) -> (x - 1), (y) -> (y)));     // West
+
+        Direction north = new Direction((x) -> (x), (y) -> (y - 1));
+        Direction east = new Direction((x) -> (x + 1), (y) -> (y));
+        Direction south = new Direction((x) -> (x), (y) -> (y + 1));
+        Direction west = new Direction((x) -> (x - 1), (y) -> (y));
+
+        north.setNeighbours(west, east);
+        east.setNeighbours(north, south);
+        south.setNeighbours(east, west);
+        west.setNeighbours(south, north);
+
+        current = north;
+    }
+
+    public JSONObject nextMove() {
+        if (grid.getColor(x1, y1)) {
+//            turnRight();
+            current = current.right;
         } else {
-            turnLeft();
+//            turnLeft();
+            current = current.left;
         }
         flipColor();
         moveForward();
@@ -28,69 +57,39 @@ public class LangstonAnt {
     }
 
     private void turnRight() {
-        switch (direction) {
-            case NORTH:
-                direction = Direction.EAST;
-                break;
-            case EAST:
-                direction = Direction.SOUTH;
-                break;
-            case SOUTH:
-                direction = Direction.WEST;
-                break;
-            case WEST:
-                direction = Direction.NORTH;
-                break;
-        }
+//        dirIndex = (dirIndex + 1) % directions.size();
     }
 
     private void turnLeft() {
-        switch (direction) {
-            case NORTH:
-                direction = Direction.WEST;
-                break;
-            case WEST:
-                direction = Direction.SOUTH;
-                break;
-            case SOUTH:
-                direction = Direction.EAST;
-                break;
-            case EAST:
-                direction = Direction.NORTH;
-                break;
-        }
+//        dirIndex = (dirIndex - 1 + directions.size()) % directions.size();
     }
 
     private void moveForward() {
-        switch (direction) {
-            case NORTH:
-                y--;
-                break;
-            case EAST:
-                x++;
-                break;
-            case SOUTH:
-                y++;
-                break;
-            case WEST:
-                x--;
-                break;
-        }
+//        y = grid.wrapCoordinate(directions.get(dirIndex).getY(y));
+//        x = grid.wrapCoordinate(directions.get(dirIndex).getX(x));
+
+        y1 = grid.wrapCoordinate(current.getY(y1));
+        x1 = grid.wrapCoordinate(current.getX(x1));
     }
 
     private void flipColor() {
-        grid[x][y] = !grid[x][y];
+        grid.flipColor(x1, y1);
     }
 
-    public JSONArray toJSON() {
+    public JSONObject toJSON() {
+        JSONObject resultObject = new JSONObject();
+        this.steps = this.steps + 1;
         JSONArray gridArray = new JSONArray();
-        for (boolean[] row : grid) {
+        for (int i = 0; i < GRID_SIZE; i++) {
             JSONArray rowArray = new JSONArray();
-            for (boolean cell : row) {
-                rowArray.put(cell ? 1 : 0);
+            for (int j = 0; j < GRID_SIZE; j++) {
+                rowArray.put(grid.getColor(i, j) ? 1 : 0);
             }
             gridArray.put(rowArray);
         }
-        return gridArray;
+
+        resultObject.put("steps", this.steps);
+        resultObject.put("data", gridArray);
+        return resultObject;
     }
 }
