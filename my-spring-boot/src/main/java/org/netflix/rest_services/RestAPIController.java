@@ -452,7 +452,6 @@ public class RestAPIController {
     }
 
     public static class MyGameData {
-
         private int row;
         private int column;
 
@@ -500,17 +499,25 @@ public class RestAPIController {
         return universe.toJSON().toString();
     }
 
-    @GetMapping("/langtons-ant/tick")
-    public String getNextHouse() {
+    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}")
+    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps) {
+        System.out.println(steps);
         if (langstonAnt == null) {
-            langstonAnt = new LangstonAnt();
+            langstonAnt = new LangstonAnt(boardSize);
         }
 
-        int steps = 100;
-        for (int i = 0; i < steps-1; i++) {
+        for (int i = 0; i < steps - 1; i++) {
             langstonAnt.nextMove();
         }
 
         return langstonAnt.nextMove().toString();
+    }
+
+    @GetMapping("/langtons-ant/reset")
+    public String resetLangtonGrid() {
+        langstonAnt = null;
+        JSONObject result = new JSONObject();
+        result.put("grid", "reset");
+        return result.toString();
     }
 }
