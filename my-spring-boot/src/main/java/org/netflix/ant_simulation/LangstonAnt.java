@@ -6,6 +6,9 @@ package org.netflix.ant_simulation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LangstonAnt {
     private final int GRID_SIZE;
     private final Torus grid;
@@ -13,13 +16,17 @@ public class LangstonAnt {
     private int y1;
     private int steps = 0;
 
+    private List<Ant> ants;
+
     private Direction current;
 
-    public LangstonAnt(int gridSize) {
+    public LangstonAnt(int gridSize, int numOfAnts) {
         this.GRID_SIZE = gridSize;
         this.grid = new Torus(gridSize);
         this.x1 = gridSize / 2;
         this.y1 = gridSize / 2;
+        this.ants = new ArrayList<>();
+        initializeAnts(numOfAnts);
 
         Direction north = new Direction((x) -> (x), (y) -> (y - 1));
         Direction east = new Direction((x) -> (x + 1), (y) -> (y));
@@ -32,6 +39,10 @@ public class LangstonAnt {
         west.setNeighbours(south, north);
 
         current = north;
+    }
+
+    private void initializeAnts(int numOfAnts){
+
     }
 
     public JSONObject nextMove() {
