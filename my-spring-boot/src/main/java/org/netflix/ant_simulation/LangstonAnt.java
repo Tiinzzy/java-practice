@@ -1,7 +1,6 @@
 package org.netflix.ant_simulation;
 
 // TODO:
-//  3- what if ant hits boarders, handle as torus/donat!?
 //  5- num of ants (last change)  <= you need a better design
 
 import org.json.JSONArray;
@@ -14,9 +13,6 @@ public class LangstonAnt {
     private int y1;
     private int steps = 0;
 
-//    private final List<Direction> directions = new LinkedList<>();
-//    private int dirIndex = 0;
-
     private Direction current;
 
     public LangstonAnt(int gridSize) {
@@ -24,11 +20,6 @@ public class LangstonAnt {
         this.grid = new Torus(gridSize);
         this.x1 = gridSize / 2;
         this.y1 = gridSize / 2;
-
-//        this.directions.add(new Direction((x) -> (x), (y) -> (y - 1)));     // North
-//        this.directions.add(new Direction((x) -> (x + 1), (y) -> (y)));     // East
-//        this.directions.add(new Direction((x) -> (x), (y) -> (y + 1)));     // South
-//        this.directions.add(new Direction((x) -> (x - 1), (y) -> (y)));     // West
 
         Direction north = new Direction((x) -> (x), (y) -> (y - 1));
         Direction east = new Direction((x) -> (x + 1), (y) -> (y));
@@ -45,10 +36,8 @@ public class LangstonAnt {
 
     public JSONObject nextMove() {
         if (grid.getColor(x1, y1)) {
-//            turnRight();
             current = current.right;
         } else {
-//            turnLeft();
             current = current.left;
         }
         flipColor();
@@ -56,18 +45,7 @@ public class LangstonAnt {
         return toJSON();
     }
 
-    private void turnRight() {
-//        dirIndex = (dirIndex + 1) % directions.size();
-    }
-
-    private void turnLeft() {
-//        dirIndex = (dirIndex - 1 + directions.size()) % directions.size();
-    }
-
     private void moveForward() {
-//        y = grid.wrapCoordinate(directions.get(dirIndex).getY(y));
-//        x = grid.wrapCoordinate(directions.get(dirIndex).getX(x));
-
         y1 = grid.wrapCoordinate(current.getY(y1));
         x1 = grid.wrapCoordinate(current.getX(x1));
     }
