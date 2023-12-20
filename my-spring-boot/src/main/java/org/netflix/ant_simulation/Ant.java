@@ -4,27 +4,28 @@ public class Ant {
     private int x;
     private int y;
     private Direction currentDirection;
+    private final Torus grid;
 
-    public Ant(int x, int y, Direction startDirection) {
+    public Ant(int x, int y, Direction startDirection, Torus grid) {
         this.x = x;
         this.y = y;
         this.currentDirection = startDirection;
+        this.grid = grid;
     }
 
-    public void moveForward(Torus grid) {
-        y = grid.wrapCoordinate(currentDirection.getY(y));
-        x = grid.wrapCoordinate(currentDirection.getX(x));
-    }
-
-    public void flipDirection(Torus grid) {
+    public void flipDirection() {
         grid.flipColor(x, y);
     }
 
-    public int getX() {
-        return x;
+    public void move() {
+        if (grid.getColor(x, y)) {
+            currentDirection = currentDirection.right;
+        } else {
+            currentDirection = currentDirection.left;
+        }
+        grid.flipColor(x, y);
+        y = grid.wrapCoordinate(currentDirection.transformY(y));
+        x = grid.wrapCoordinate(currentDirection.transformX(x));
     }
 
-    public int getY() {
-        return y;
-    }
 }
