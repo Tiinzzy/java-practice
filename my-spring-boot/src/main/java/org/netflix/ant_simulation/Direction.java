@@ -17,11 +17,11 @@ public class Direction {
         this.transformY = transformY;
     }
 
-    Integer getX(Integer x) {
+    Integer transformX(Integer x) {
         return this.transformX.apply(x);
     }
 
-    Integer getY(Integer y) {
+    Integer transformY(Integer y) {
         return this.transformY.apply(y);
     }
 
