@@ -18,6 +18,7 @@ import org.netflix.model.tv_series.TvSeriesDao;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -499,11 +500,11 @@ public class RestAPIController {
         return universe.toJSON().toString();
     }
 
-    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}")
-    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps) {
-        System.out.println(steps);
+    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}/ants/{ants}")
+    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps, @PathVariable int ants) {
+        System.out.println(LocalDateTime.now().toString() + "   " + steps);
         if (langstonAnt == null) {
-            langstonAnt = new LangstonAnt(boardSize);
+            langstonAnt = new LangstonAnt(boardSize, ants);
         }
 
         for (int i = 0; i < steps - 1; i++) {
