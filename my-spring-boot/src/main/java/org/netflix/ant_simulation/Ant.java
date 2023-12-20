@@ -16,8 +16,8 @@ public class Ant {
         x = grid.wrapCoordinate(currentDirection.getX(x));
     }
 
-    public void flipDirection(boolean color) {
-        currentDirection = color ? currentDirection.right : currentDirection.left;
+    public void flipDirection(Torus grid) {
+        grid.flipColor(x, y);
     }
 
     public int getX() {
