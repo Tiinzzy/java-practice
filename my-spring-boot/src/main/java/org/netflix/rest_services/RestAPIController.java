@@ -499,11 +499,11 @@ public class RestAPIController {
         return universe.toJSON().toString();
     }
 
-    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}")
-    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps) {
+    @GetMapping("/langtons-ant/tick/board/{boardSize}/steps/{steps}/ants/{ants}")
+    public String getNextHouse(@PathVariable int boardSize, @PathVariable int steps, @PathVariable int ants) {
         System.out.println(steps);
         if (langstonAnt == null) {
-            langstonAnt = new LangstonAnt(boardSize);
+            langstonAnt = new LangstonAnt(boardSize, ants);
         }
 
         for (int i = 0; i < steps - 1; i++) {
