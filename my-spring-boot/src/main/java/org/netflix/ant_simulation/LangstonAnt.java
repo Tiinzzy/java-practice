@@ -8,25 +8,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LangstonAnt {
     private final int GRID_SIZE;
     private final Torus grid;
-    private int x1;
-    private int y1;
     private int steps = 0;
-
     private List<Ant> ants;
-
-    private Direction current;
 
     public LangstonAnt(int gridSize, int numOfAnts) {
         this.GRID_SIZE = gridSize;
         this.grid = new Torus(gridSize);
-        this.x1 = gridSize / 2;
-        this.y1 = gridSize / 2;
         this.ants = new ArrayList<>();
-        initializeAnts(numOfAnts);
 
         Direction north = new Direction((x) -> (x), (y) -> (y - 1));
         Direction east = new Direction((x) -> (x + 1), (y) -> (y));
@@ -38,31 +31,17 @@ public class LangstonAnt {
         south.setNeighbours(east, west);
         west.setNeighbours(south, north);
 
-        current = north;
-    }
-
-    private void initializeAnts(int numOfAnts){
-
+        Random random = new Random();
+        for (int i = 0; i < numOfAnts; i++) {
+            int x0 = random.nextInt(0, gridSize);
+            int y0 = random.nextInt(0, gridSize);
+            ants.add(new Ant(x0, y0, north, grid));
+        }
     }
 
     public JSONObject nextMove() {
-        if (grid.getColor(x1, y1)) {
-            current = current.right;
-        } else {
-            current = current.left;
-        }
-        flipColor();
-        moveForward();
+        ants.forEach(Ant::move);
         return toJSON();
-    }
-
-    private void moveForward() {
-        y1 = grid.wrapCoordinate(current.getY(y1));
-        x1 = grid.wrapCoordinate(current.getX(x1));
-    }
-
-    private void flipColor() {
-        grid.flipColor(x1, y1);
     }
 
     public JSONObject toJSON() {
