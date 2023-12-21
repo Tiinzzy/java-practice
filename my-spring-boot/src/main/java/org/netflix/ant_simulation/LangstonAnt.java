@@ -31,13 +31,11 @@ public class LangstonAnt {
         south.setNeighbours(east, west);
         west.setNeighbours(south, north);
 
-        String[] colors = {"Red", "Green", "Blue", "Yellow", "Purple", "Orange"};
         Random random = new Random();
         for (int i = 0; i < numOfAnts; i++) {
             int x0 = random.nextInt(0, gridSize);
             int y0 = random.nextInt(0, gridSize);
-            String color = colors[i % colors.length];
-            ants.add(new Ant(x0, y0, north, grid, color));
+            ants.add(new Ant(x0, y0, north, grid, i + 1));
         }
     }
 
@@ -53,21 +51,10 @@ public class LangstonAnt {
         for (int i = 0; i < GRID_SIZE; i++) {
             JSONArray rowArray = new JSONArray();
             for (int j = 0; j < GRID_SIZE; j++) {
-                rowArray.put(grid.getColor(i, j) ? 1 : 0);
+                rowArray.put(grid.getColor(i, j));
             }
             gridArray.put(rowArray);
         }
-
-        JSONArray antsArray = new JSONArray();
-        for (Ant ant : ants) {
-            JSONObject antObject = new JSONObject();
-            antObject.put("x", ant.x);
-            antObject.put("y", ant.y);
-            antObject.put("color", ant.getColor());
-            antsArray.put(antObject);
-        }
-
-        resultObject.put("ants", antsArray);
 
         resultObject.put("steps", this.steps);
         resultObject.put("data", gridArray);
