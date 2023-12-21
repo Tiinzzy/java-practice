@@ -31,11 +31,13 @@ public class LangstonAnt {
         south.setNeighbours(east, west);
         west.setNeighbours(south, north);
 
+        String[] colors = {"Red", "Green", "Blue", "Yellow", "Purple", "Orange"};
         Random random = new Random();
         for (int i = 0; i < numOfAnts; i++) {
             int x0 = random.nextInt(0, gridSize);
             int y0 = random.nextInt(0, gridSize);
-            ants.add(new Ant(x0, y0, north, grid));
+            String color = colors[i % colors.length];
+            ants.add(new Ant(x0, y0, north, grid, color));
         }
     }
 
