@@ -58,6 +58,17 @@ public class LangstonAnt {
             gridArray.put(rowArray);
         }
 
+        JSONArray antsArray = new JSONArray();
+        for (Ant ant : ants) {
+            JSONObject antObject = new JSONObject();
+            antObject.put("x", ant.x);
+            antObject.put("y", ant.y);
+            antObject.put("color", ant.getColor());
+            antsArray.put(antObject);
+        }
+
+        resultObject.put("ants", antsArray);
+
         resultObject.put("steps", this.steps);
         resultObject.put("data", gridArray);
         return resultObject;
