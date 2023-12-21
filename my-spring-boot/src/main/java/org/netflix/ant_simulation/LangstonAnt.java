@@ -35,7 +35,7 @@ public class LangstonAnt {
         for (int i = 0; i < numOfAnts; i++) {
             int x0 = random.nextInt(0, gridSize);
             int y0 = random.nextInt(0, gridSize);
-            ants.add(new Ant(x0, y0, north, grid));
+            ants.add(new Ant(x0, y0, north, grid, i + 1));
         }
     }
 
@@ -51,7 +51,7 @@ public class LangstonAnt {
         for (int i = 0; i < GRID_SIZE; i++) {
             JSONArray rowArray = new JSONArray();
             for (int j = 0; j < GRID_SIZE; j++) {
-                rowArray.put(grid.getColor(i, j) ? 1 : 0);
+                rowArray.put(grid.getColor(i, j));
             }
             gridArray.put(rowArray);
         }
