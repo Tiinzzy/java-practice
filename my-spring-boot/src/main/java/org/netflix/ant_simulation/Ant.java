@@ -1,8 +1,8 @@
 package org.netflix.ant_simulation;
 
 public class Ant {
-    private int x;
-    private int y;
+    int x;
+    int y;
     private Direction currentDirection;
     private final Torus grid;
     private String color;
